@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Transaksi</title>
+    <link href="./assets/css/styles.css" rel="stylesheet" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      <aside
+        class="w-64 bg-gray-800 text-white fixed top-0 left-0 h-full overflow-y-auto flex flex-col justify-between"
+      >
+        <div>
+          <div
+            class="p-4 text-center text-2xl font-bold border-b border-gray-700"
+          >
+            Admin Dashboard
+          </div>
+          <nav class="mt-4">
+            <a
+              href="/dashboard"
+              class="block px-4 py-2 text-gray-400 hover:bg-gray-700 hover:text-zinc-50 focus:bg-gray-700"
+              ><i class="fa-solid fa-house" style="color: #ffffffa7"></i>
+              Dashboard</a
+            >
+            <a
+              href="./product.html"
+              class="block px-4 py-2 text-gray-400 hover:bg-gray-700 hover:text-zinc-50 focus:bg-gray-700"
+            >
+              <i class="fa-solid fa-shirt" style="color: #ffffffa7"></i> Kelola
+              Produk</a
+            >
+            <a
+              href="./kategori.html"
+              class="block px-4 py-2 text-gray-400 hover:bg-gray-700 hover:text-zinc-50"
+            >
+              <i class="fa-solid fa-list"></i> Kelola Kategori</a
+            >
+            <a
+              href="#"
+              class="block px-4 py-2 text-gray-400 hover:bg-gray-700 hover:text-zinc-50 focus:bg-gray-700 active_sidebar"
+              ><i
+                class="fa-solid fa-money-bill-wave"
+                style="color: #ffffffa7"
+              ></i>
+              Kelola Transaksi</a
+            >
+          </nav>
+        </div>
+        <div class="p-4 border-t border-gray-700">
+          <button
+            id="logoutButton"
+            class="w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Logout
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 ml-64 p-6 overflow-y-auto">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Kelola Transaksi</h1>
+
+        <!-- Tabel Transaksi -->
+        <table class="w-full bg-white rounded-lg shadow-md">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="text-left px-4 py-2">ID Transaksi</th>
+              <th class="text-left px-4 py-2">Nama Produk</th>
+              <th class="text-left px-4 py-2">Waktu</th>
+              <th class="text-left px-4 py-2">Total</th>
+              <th class="text-left px-4 py-2">Status</th>
+              <th class="text-center px-4 py-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="transactionTable" class="divide-y divide-gray-200">
+            <!-- Data transaksi akan diisi di sini -->
+          </tbody>
+        </table>
+      </main>
+    </div>
+
+    <script src="./assets/js/transaksi.js"></script>
+  </body>
+</html>

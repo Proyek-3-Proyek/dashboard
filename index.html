@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link href="./assets/css/styles.css" rel="stylesheet" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/your-kit-id.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Sidebar -->
+    <div class="flex h-screen">
+      <aside class="w-64 bg-gray-800 text-white flex flex-col justify-between">
+        <div>
+          <div
+            class="p-4 text-center text-2xl font-bold border-b border-gray-700"
+          >
+            Admin Dashboard
+          </div>
+          <nav class="mt-4">
+            <a
+              href="/dashboard"
+              class="block px-4 py-2 text-gray-400 hover:bg-gray-700 hover:text-zinc-50 active_sidebar"
+              ><i class="fa-solid fa-house" style="color: #ffffffa7"></i>
+              Dashboard</a
+            >
+            <a
+              href="./product.html"
+              class="block px-4 py-2 text-gray-400 hover:bg-gray-700 hover:text-zinc-50"
+            >
+              <i class="fa-solid fa-shirt" style="color: #ffffffa7"></i> Kelola
+              Produk</a
+            >
+            <a
+              href="./kategori.html"
+              class="block px-4 py-2 text-gray-400 hover:bg-gray-700 hover:text-zinc-50"
+            >
+              <i class="fa-solid fa-list"></i> Kelola Kategori</a
+            >
+            <a
+              href="./transaksi.html"
+              class="block px-4 py-2 text-gray-400 hover:bg-gray-700 hover:text-zinc-50"
+              ><i
+                class="fa-solid fa-money-bill-wave"
+                style="color: #ffffffa7"
+              ></i>
+              Kelola Transaksi</a
+            >
+          </nav>
+        </div>
+        <div class="p-4 border-t border-gray-700">
+          <button
+            id="logoutButton"
+            class="w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Logout
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h1>
+      </main>
+    </div>
+
+    <script src="./assets/js/dashboard.js"></script>
+  </body>
+</html>
