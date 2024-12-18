@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
       text: "Anda tidak memiliki akses. Silakan login sebagai admin.",
     }).then(() => {
       window.location.href =
-        "https://proyek-3-proyek.github.io/tokline.github.io/src/page/auth/login.html";
+        "/login";
     });
     return;
   }
@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
       text: "Anda tidak memiliki akses ke halaman ini.",
     }).then(() => {
       window.location.href =
-        "https://proyek-3-proyek.github.io/tokline.github.io/src/page/auth/login.html";
+        "/login";
     });
   }
 
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Swal.fire("Logout Berhasil", "Anda telah logout.", "success").then(
           () => {
             window.location.href =
-              "https://proyek-3-proyek.github.io/tokline.github.io/src/page/auth/login.html";
+              "/login";
           }
         );
       }
