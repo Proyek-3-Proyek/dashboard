@@ -10,8 +10,6 @@ const token = localStorage.getItem("token");
 const BASE_URL = "https://backend-eight-phi-75.vercel.app/api";
 
 // Fetch Produk
-
-// Fetch Produk berdasarkan kategori
 async function fetchProducts(categoryId = "") {
   try {
     const endpoint = categoryId
