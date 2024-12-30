@@ -121,7 +121,6 @@ productForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  // Cocokkan tipe data
   const validCategory = categories.find(
     (cat) => cat.id === Number(selectedCategory)
   );
@@ -135,18 +134,32 @@ productForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  const formData = new FormData();
-  formData.append("nama", document.getElementById("productName").value);
-  formData.append(
-    "deskripsi",
-    document.getElementById("productDescription").value
-  );
-  formData.append("id_kategori", selectedCategory); // Pastikan nama parameter sesuai
-  formData.append("harga", document.getElementById("productPrice").value);
-  formData.append("qty", document.getElementById("productStock").value);
-  if (document.getElementById("productImage").files[0]) {
-    formData.append("file", document.getElementById("productImage").files[0]);
+  const productName = document.getElementById("productName").value;
+  const productDescription =
+    document.getElementById("productDescription").value;
+  const productPrice = document.getElementById("productPrice").value;
+  const productStock = document.getElementById("productStock").value;
+  const productImage = document.getElementById("productImage").files[0];
+
+  // Validasi input
+  if (
+    !productName ||
+    !productDescription ||
+    !productPrice ||
+    !productStock ||
+    !productImage
+  ) {
+    Swal.fire("Error", "Semua field dan file harus diisi.", "error");
+    return;
   }
+
+  const formData = new FormData();
+  formData.append("nama", productName);
+  formData.append("deskripsi", productDescription);
+  formData.append("id_kategori", selectedCategory); // Pastikan nama parameter sesuai
+  formData.append("harga", productPrice);
+  formData.append("qty", productStock);
+  formData.append("file", productImage);
 
   try {
     const response = await fetch(
