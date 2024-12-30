@@ -46,7 +46,7 @@ async function fetchProducts(category = "") {
   }
 }
 
-// Fetch Kategori
+/// Fetch Kategori
 async function fetchCategories() {
   try {
     const response = await fetch(`${BASE_URL}/kategori/all`, {
@@ -58,7 +58,7 @@ async function fetchCategories() {
     categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
     productCategory.innerHTML = '<option value="">Pilih Kategori</option>';
     categories.forEach((category) => {
-      const option = `<option value="${category.jenis_kategori}">${category.jenis_kategori}</option>`;
+      const option = `<option value="${category.id_kategori}">${category.jenis_kategori}</option>`;
       categoryFilter.innerHTML += option;
       productCategory.innerHTML += option;
     });
@@ -211,8 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "Akses Ditolak",
       text: "Anda tidak memiliki akses. Silakan login sebagai admin.",
     }).then(() => {
-      window.location.href =
-        "/login";
+      window.location.href = "/login";
     });
     return;
   }
@@ -225,8 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "Akses Ditolak",
       text: "Anda tidak memiliki akses ke halaman ini.",
     }).then(() => {
-      window.location.href =
-        "/login";
+      window.location.href = "/login";
     });
   }
 
@@ -246,13 +244,52 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("token");
         Swal.fire("Logout Berhasil", "Anda telah logout.", "success").then(
           () => {
-            window.location.href =
-              "/login";
+            window.location.href = "/login";
           }
         );
       }
     });
   });
+});
+
+// Fetch Produk berdasarkan kategori
+async function fetchProducts(categoryId = "") {
+  Swal.fire({
+    title: "Memuat Data Produk",
+    text: "Silakan tunggu...",
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+
+  try {
+    const endpoint = categoryId
+      ? `${BASE_URL}/produk/kategori/${categoryId}`
+      : `${BASE_URL}/produk/all`;
+    const response = await fetch(endpoint, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) throw new Error("Gagal mengambil data produk");
+
+    const products = await response.json();
+    renderProducts(products);
+    Swal.close();
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      title: "Error",
+      text: "Gagal memuat data produk. Silakan coba lagi.",
+      icon: "error",
+    });
+  }
+}
+
+// Tambahkan Event Listener untuk Filter Kategori
+categoryFilter.addEventListener("change", () => {
+  const selectedCategoryId = categoryFilter.value; // ID Kategori
+  fetchProducts(selectedCategoryId);
 });
 
 // Fungsi parseJwt untuk mem-parse token JWT
