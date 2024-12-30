@@ -161,6 +161,8 @@ productForm.addEventListener("submit", async (e) => {
   formData.append("qty", productStock);
   formData.append("file", productImage);
 
+  console.log("Form Data:", Object.fromEntries(formData.entries()));
+
   try {
     const response = await fetch(
       id ? `${BASE_URL}/produk/update/${id}` : `${BASE_URL}/produk/create`,
