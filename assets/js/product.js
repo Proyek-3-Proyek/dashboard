@@ -264,7 +264,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Event listener untuk filter kategori
   categoryFilter.addEventListener("change", () => {
-    const selectedCategoryId = categoryFilter.value.trim(); // Ambil nilai dari dropdown
+    const selectedCategoryId = categoryFilter.value; // Ambil nilai dari dropdown
     console.log("Selected Category ID:", selectedCategoryId); // Log untuk debug
     console.log("Category Filter InnerHTML:", categoryFilter.innerHTML);
 
