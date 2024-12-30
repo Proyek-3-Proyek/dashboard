@@ -44,19 +44,6 @@ async function fetchProducts(categoryId = "") {
   }
 }
 
-const fetchCategories = async () => {
-  try {
-    const response = await fetch(`${BASE_URL}/kategori`);
-    if (!response.ok) throw new Error("Gagal memuat kategori");
-    const categories = await response.json();
-    return categories.data;
-  } catch (error) {
-    console.error("Error memuat kategori:", error);
-    Swal.fire("Error", "Gagal memuat kategori. Silakan coba lagi.", "error");
-    return [];
-  }
-};
-
 /// Fetch Kategori
 async function fetchCategories() {
   try {
@@ -67,13 +54,10 @@ async function fetchCategories() {
     if (!response.ok) throw new Error("Gagal mengambil data kategori");
 
     const categories = await response.json();
-    // console.log("Categories fetched:", categories); // Debug log
 
-    // Reset isi dropdown sebelum mengisi ulang
     categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
     productCategory.innerHTML = '<option value="">Pilih Kategori</option>';
 
-    // Isi dropdown dengan opsi kategori
     categories.forEach((category) => {
       const option = `<option value="${category.id}">${category.jenis_kategori}</option>`;
       categoryFilter.innerHTML += option;
@@ -125,7 +109,8 @@ productForm.addEventListener("submit", async (e) => {
   const categories = await fetchCategories();
 
   // Validasi kategori
-  if (!categories.includes(selectedCategory)) {
+  const validCategory = categories.find((cat) => cat.id === selectedCategory);
+  if (!validCategory) {
     Swal.fire(
       "Error",
       "Kategori tidak valid. Pilih kategori yang benar.",
