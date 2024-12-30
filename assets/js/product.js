@@ -49,9 +49,13 @@ async function fetchCategories() {
     const response = await fetch(`${BASE_URL}/kategori/all`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (!response.ok) throw new Error("Gagal mengambil data kategori");
-    const categories = await response.json();
 
+    if (!response.ok) throw new Error("Gagal mengambil data kategori");
+
+    const categories = await response.json();
+    console.log("Categories fetched:", categories); // Debug log
+
+    // Isi dropdown dengan kategori
     categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
     productCategory.innerHTML = '<option value="">Pilih Kategori</option>';
     categories.forEach((category) => {
