@@ -57,8 +57,8 @@ async function fetchCategories() {
 
     categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
     productCategory.innerHTML = '<option value="">Pilih Kategori</option>';
-    categories.forEach((category) => {
-      const option = `<option value="${category.id_kategori}">${category.jenis_kategori}</option>`;
+    categories.forEach((kategory) => {
+      const option = `<option value="${kategory.id_kategori}">${kategory.jenis_kategori}</option>`;
       categoryFilter.innerHTML += option;
       productCategory.innerHTML += option;
     });
