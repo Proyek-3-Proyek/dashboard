@@ -289,6 +289,7 @@ async function fetchProducts(categoryId = "") {
 // Tambahkan Event Listener untuk Filter Kategori
 categoryFilter.addEventListener("change", () => {
   const selectedCategoryId = categoryFilter.value; // ID Kategori
+  console.log("Selected Category ID:", selectedCategoryId);
   fetchProducts(selectedCategoryId);
 });
 
