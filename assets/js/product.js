@@ -108,11 +108,24 @@ function renderProducts(products) {
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const id = document.getElementById("productId").value;
-  const selectedCategory = productCategory.value;
+  const selectedCategory = productCategory.value; // String
   const categories = await fetchCategories();
 
+  // Debugging log
+  console.log("Selected Category:", selectedCategory);
+  console.log("Categories Array:", categories);
+
   // Validasi kategori
-  const validCategory = categories.find((cat) => cat.id === selectedCategory);
+  if (!Array.isArray(categories)) {
+    Swal.fire("Error", "Gagal memuat kategori. Silakan coba lagi.", "error");
+    return;
+  }
+
+  // Cocokkan tipe data
+  const validCategory = categories.find(
+    (cat) => cat.id === Number(selectedCategory)
+  );
+
   if (!validCategory) {
     Swal.fire(
       "Error",
