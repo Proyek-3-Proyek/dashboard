@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "Akses Ditolak",
       text: "Anda tidak memiliki akses. Silakan login sebagai admin.",
     }).then(() => {
-      window.location.href =
-        "/login";
+      window.location.href = "/login";
     });
     return;
   }
@@ -21,14 +20,21 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "Akses Ditolak",
       text: "Anda tidak memiliki akses ke halaman ini.",
     }).then(() => {
-      window.location.href =
-        "/login";
+      window.location.href = "/login";
     });
     return;
   }
 
   // Fungsi fetch data transaksi
   async function fetchTransactions() {
+    Swal.fire({
+      title: "Memuat Data...",
+      text: "Mohon tunggu, data kategori sedang dimuat.",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     try {
       const response = await fetch(
         "https://backend-eight-phi-75.vercel.app/api/payment/transactions",
@@ -75,11 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         transactionTable.appendChild(row);
       });
 
-      Swal.fire({
-        icon: "success",
-        title: "Data Berhasil Diambil",
-        text: "Data transaksi telah berhasil dimuat.",
-      });
+      Swal.close();
     } catch (error) {
       console.error("Error:", error);
       Swal.fire({
@@ -131,8 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("token");
         Swal.fire("Logout Berhasil", "Anda telah logout.", "success").then(
           () => {
-            window.location.href =
-              "/login";
+            window.location.href = "/login";
           }
         );
       }
