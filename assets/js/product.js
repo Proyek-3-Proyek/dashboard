@@ -22,10 +22,11 @@ async function fetchProducts(categoryId = "") {
   });
 
   try {
-    // Endpoint disesuaikan berdasarkan ID kategori
     const endpoint = categoryId
       ? `${BASE_URL}/produk/kategori/${categoryId}`
       : `${BASE_URL}/produk/all`;
+
+    console.log("Fetching from endpoint:", endpoint); // Debug log
     const response = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -253,6 +254,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Fetch Produk berdasarkan kategori
 async function fetchProducts(categoryId = "") {
+  Swal.fire({
+    title: "Memuat Data Produk",
+    text: "Silakan tunggu...",
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+
   try {
     const endpoint = categoryId
       ? `${BASE_URL}/produk/kategori/${categoryId}`
@@ -283,8 +293,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Event listener untuk filter kategori
   categoryFilter.addEventListener("change", () => {
-    const selectedCategoryId = categoryFilter.value; // Ambil id_kategori dari dropdown
-    fetchProducts(selectedCategoryId); // Panggil API produk dengan ID kategori
+    const selectedCategoryId = categoryFilter.value.trim(); // Pastikan nilai bersih dari whitespace
+    if (!selectedCategoryId) {
+      console.log("Memuat semua produk...");
+      fetchProducts(); // Muat semua produk jika kategori tidak dipilih
+    } else {
+      console.log("Memuat produk untuk kategori:", selectedCategoryId);
+      fetchProducts(selectedCategoryId); // Muat produk berdasarkan kategori
+    }
   });
 });
 
