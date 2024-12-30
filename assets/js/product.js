@@ -31,7 +31,7 @@ async function fetchProducts(categoryId = "") {
     if (!response.ok) throw new Error("Gagal mengambil data produk");
 
     const products = await response.json();
-    console.log("Products fetched:", products); // Debug log
+    // console.log("Products fetched:", products); // Debug log
     renderProducts(products);
     Swal.close();
   } catch (error) {
@@ -54,7 +54,7 @@ async function fetchCategories() {
     if (!response.ok) throw new Error("Gagal mengambil data kategori");
 
     const categories = await response.json();
-    console.log("Categories fetched:", categories); // Debug log
+    // console.log("Categories fetched:", categories); // Debug log
 
     // Reset isi dropdown sebelum mengisi ulang
     categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
@@ -76,7 +76,10 @@ async function fetchCategories() {
 function renderProducts(products) {
   productList.innerHTML = "";
   products.forEach((product) => {
-    const kategori = product.kategori ? product.kategori.jenis_kategori : "Tidak Diketahui";
+    const kategori = product.kategori
+      ? product.kategori.jenis_kategori
+      : "Tidak Diketahui";
+
     const productCard = document.createElement("div");
     productCard.className = "bg-white p-4 rounded-lg shadow-md";
     productCard.innerHTML = `
@@ -266,8 +269,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Event listener untuk filter kategori
   categoryFilter.addEventListener("change", () => {
     const selectedCategoryId = categoryFilter.value; // Ambil nilai dari dropdown
-    console.log("Selected Category ID:", selectedCategoryId); // Log untuk debug
-    console.log("Category Filter InnerHTML:", categoryFilter.innerHTML);
+    // console.log("Selected Category ID:", selectedCategoryId); // Log untuk debug
+    // console.log("Category Filter InnerHTML:", categoryFilter.innerHTML);
 
     // Panggil fetchProducts dengan ID kategori yang dipilih
     fetchProducts(selectedCategoryId || ""); // Jika kosong, ambil semua produk
