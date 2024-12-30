@@ -107,37 +107,94 @@ function renderProducts(products) {
 // Tambah/Edit Produk
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const id = document.getElementById("productId").value;
+  const productName = document.getElementById("productName").value;
+  const productDescription =
+    document.getElementById("productDescription").value;
+  const productPrice = document.getElementById("productPrice").value;
+  const productStock = document.getElementById("productStock").value;
+  const productImage = document.getElementById("productImage").files[0];
+  const productCategory = document.getElementById("productCategory").value;
+
+  // Validasi data input
+  if (!productName) {
+    Swal.fire("Error", "Nama produk harus diisi", "error");
+    return;
+  }
+
+  if (!productPrice || isNaN(productPrice)) {
+    Swal.fire(
+      "Error",
+      "Harga produk harus diisi dengan angka yang valid",
+      "error"
+    );
+    return;
+  }
+
+  if (!productStock || isNaN(productStock)) {
+    Swal.fire(
+      "Error",
+      "Stok produk harus diisi dengan angka yang valid",
+      "error"
+    );
+    return;
+  }
+
   const formData = new FormData();
-  formData.append("nama", document.getElementById("productName").value);
-  formData.append(
-    "deskripsi",
-    document.getElementById("productDescription").value
-  );
-  formData.append("nama_kategori", productCategory.value);
-  formData.append("harga", document.getElementById("productPrice").value);
-  formData.append("qty", document.getElementById("productStock").value);
-  if (document.getElementById("productImage").files[0]) {
-    formData.append("file", document.getElementById("productImage").files[0]);
+  formData.append("nama", productName);
+  formData.append("deskripsi", productDescription);
+  formData.append("nama_kategori", productCategory);
+  formData.append("harga", productPrice);
+  formData.append("qty", productStock);
+
+  if (productImage) {
+    formData.append("file", productImage);
   }
 
   try {
-    const response = await fetch(
-      id ? `${BASE_URL}/produk/update/${id}` : `${BASE_URL}/produk/create`,
-      {
-        method: id ? "PUT" : "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      }
-    );
-    if (!response.ok) throw new Error("Gagal menyimpan data");
+    // Tentukan URL dan metode berdasarkan ID
+    const url = id
+      ? `${BASE_URL}/produk/update/${id}`
+      : `${BASE_URL}/produk/create`;
+    const method = id ? "PUT" : "POST";
 
-    Swal.fire("Berhasil!", "Produk berhasil disimpan.", "success");
+    // Pastikan token ada
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire("Error", "Anda harus login terlebih dahulu", "error");
+      return;
+    }
+
+    // Kirim data ke server
+    const response = await fetch(url, {
+      method,
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+
+    // Tangani respons
+    const result = await response.json();
+    if (!response.ok) {
+      Swal.fire("Error", result.message || "Terjadi kesalahan", "error");
+      throw new Error(result.message);
+    }
+
+    // Pesan berhasil berbeda untuk create dan update
+    const successMessage = id
+      ? "Produk berhasil diperbarui."
+      : "Produk berhasil dibuat.";
+    Swal.fire("Berhasil!", successMessage, "success");
+
     modal.classList.add("hidden");
-    fetchProducts();
+    fetchProducts(); // Update daftar produk
   } catch (error) {
-    console.error(error);
-    Swal.fire("Error", "Terjadi kesalahan saat menyimpan produk", "error");
+    console.error("Error:", error);
+    Swal.fire(
+      "Error",
+      error.message || "Terjadi kesalahan saat menyimpan produk",
+      "error"
+    );
   }
 });
 
