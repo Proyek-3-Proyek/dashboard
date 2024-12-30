@@ -261,14 +261,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Event listener untuk filter kategori
   categoryFilter.addEventListener("change", () => {
-    const selectedCategoryId = categoryFilter.value.trim(); // Pastikan nilai bersih dari whitespace
-    if (!selectedCategoryId) {
-      console.log("Memuat semua produk...");
-      fetchProducts(); // Muat semua produk jika kategori tidak dipilih
-    } else {
-      console.log("Memuat produk untuk kategori:", selectedCategoryId);
-      fetchProducts(selectedCategoryId); // Muat produk berdasarkan kategori
-    }
+    const selectedCategoryId = categoryFilter.value; // Ambil id_kategori dari dropdown
+    console.log("Selected Category ID:", selectedCategoryId); // Debug log
+    fetchProducts(selectedCategoryId);
   });
 });
 
