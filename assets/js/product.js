@@ -63,9 +63,12 @@ async function fetchCategories() {
       categoryFilter.innerHTML += option;
       productCategory.innerHTML += option;
     });
+    console.log("Categories fetched:", categories); // Debugging data kategori
+    return categories; // Mengembalikan array kategori
   } catch (error) {
     console.error(error);
-    alert("Error saat memuat kategori");
+    Swal.fire("Error", "Error saat memuat kategori", "error");
+    return []; // Mengembalikan array kosong jika terjadi error
   }
 }
 
