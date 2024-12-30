@@ -11,6 +11,7 @@ const BASE_URL = "https://backend-eight-phi-75.vercel.app/api";
 
 // Fetch Produk
 
+// Fetch Produk berdasarkan kategori
 async function fetchProducts(categoryId = "") {
   Swal.fire({
     title: "Memuat Data Produk",
@@ -24,18 +25,15 @@ async function fetchProducts(categoryId = "") {
   try {
     const endpoint = categoryId
       ? `${BASE_URL}/produk/kategori/${categoryId}`
-      : `${BASE_URL}/produk/all`;
-
-    console.log("Fetching from endpoint:", endpoint); // Debug log
+      : `${BASE_URL}/produk/all`; // Endpoint berdasarkan kebutuhan Anda
     const response = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     if (!response.ok) throw new Error("Gagal mengambil data produk");
-
     const products = await response.json();
+
     renderProducts(products);
-    Swal.close();
   } catch (error) {
     console.error(error);
     Swal.fire({
@@ -251,39 +249,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
-// Fetch Produk berdasarkan kategori
-async function fetchProducts(categoryId = "") {
-  Swal.fire({
-    title: "Memuat Data Produk",
-    text: "Silakan tunggu...",
-    allowOutsideClick: false,
-    didOpen: () => {
-      Swal.showLoading();
-    },
-  });
-
-  try {
-    const endpoint = categoryId
-      ? `${BASE_URL}/produk/kategori/${categoryId}`
-      : `${BASE_URL}/produk/all`; // Endpoint berdasarkan kebutuhan Anda
-    const response = await fetch(endpoint, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!response.ok) throw new Error("Gagal mengambil data produk");
-    const products = await response.json();
-
-    renderProducts(products);
-  } catch (error) {
-    console.error(error);
-    Swal.fire({
-      title: "Error",
-      text: "Gagal memuat data produk. Silakan coba lagi.",
-      icon: "error",
-    });
-  }
-}
 
 // Tambahkan Event Listener untuk Filter Kategori
 // Inisialisasi kategori saat DOM sudah siap
