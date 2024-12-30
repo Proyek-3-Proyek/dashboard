@@ -23,16 +23,16 @@ async function fetchProducts(categoryId = "") {
   try {
     const endpoint = categoryId
       ? `${BASE_URL}/produk/kategori/${categoryId}`
-      : `${BASE_URL}/produk/all`; // Endpoint berdasarkan kebutuhan Anda
+      : `${BASE_URL}/produk/all`;
     const response = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     if (!response.ok) throw new Error("Gagal mengambil data produk");
+
     const products = await response.json();
-
+    console.log("Products fetched:", products); // Debug log
     renderProducts(products);
-
     Swal.close();
   } catch (error) {
     console.error(error);
@@ -76,6 +76,7 @@ async function fetchCategories() {
 function renderProducts(products) {
   productList.innerHTML = "";
   products.forEach((product) => {
+    const kategori = product.kategori ? product.kategori.jenis_kategori : "Tidak Diketahui";
     const productCard = document.createElement("div");
     productCard.className = "bg-white p-4 rounded-lg shadow-md";
     productCard.innerHTML = `
