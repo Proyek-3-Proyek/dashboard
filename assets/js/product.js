@@ -11,7 +11,7 @@ const BASE_URL = "https://backend-eight-phi-75.vercel.app/api";
 
 // Fetch Produk
 
-async function fetchProducts(selectedCategory = "") {
+async function fetchProducts(categoryId = "") {
   Swal.fire({
     title: "Memuat Data Produk",
     text: "Silakan tunggu...",
@@ -22,22 +22,18 @@ async function fetchProducts(selectedCategory = "") {
   });
 
   try {
-    const response = await fetch(`${BASE_URL}/produk/all`, {
+    // Endpoint disesuaikan berdasarkan ID kategori
+    const endpoint = categoryId
+      ? `${BASE_URL}/produk/kategori/${categoryId}`
+      : `${BASE_URL}/produk/all`;
+    const response = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     if (!response.ok) throw new Error("Gagal mengambil data produk");
 
     const products = await response.json();
-
-    // Filter berdasarkan jenis_kategori
-    const filteredProducts = selectedCategory
-      ? products.filter(
-          (product) => product.kategori.jenis_kategori === selectedCategory
-        )
-      : products;
-
-    renderProducts(filteredProducts);
+    renderProducts(products);
     Swal.close();
   } catch (error) {
     console.error(error);
@@ -282,14 +278,13 @@ async function fetchProducts(categoryId = "") {
 // Tambahkan Event Listener untuk Filter Kategori
 // Inisialisasi kategori saat DOM sudah siap
 document.addEventListener("DOMContentLoaded", async () => {
-  // Memuat kategori dan produk saat pertama kali
-  await fetchCategories();
-  fetchProducts();
+  await fetchCategories(); // Memuat kategori untuk dropdown
+  fetchProducts(); // Memuat semua produk
 
   // Event listener untuk filter kategori
   categoryFilter.addEventListener("change", () => {
-    const selectedCategoryId = categoryFilter.value; // Ambil id_kategori
-    fetchProducts(selectedCategoryId);
+    const selectedCategoryId = categoryFilter.value; // Ambil id_kategori dari dropdown
+    fetchProducts(selectedCategoryId); // Panggil API produk dengan ID kategori
   });
 });
 
