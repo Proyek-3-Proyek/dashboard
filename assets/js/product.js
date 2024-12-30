@@ -11,7 +11,7 @@ const BASE_URL = "https://backend-eight-phi-75.vercel.app/api";
 
 // Fetch Produk
 
-async function fetchProducts(category = "") {
+async function fetchProducts(categoryName = "") {
   Swal.fire({
     title: "Memuat Data Produk",
     text: "Silakan tunggu...",
@@ -28,9 +28,11 @@ async function fetchProducts(category = "") {
     if (!response.ok) throw new Error("Gagal mengambil data produk");
 
     const products = await response.json();
-    const filteredProducts = category
+
+    // Filter berdasarkan jenis_kategori
+    const filteredProducts = categoryName
       ? products.filter(
-          (product) => product.kategori.jenis_kategori === category
+          (product) => product.kategori.jenis_kategori === categoryName
         )
       : products;
 
@@ -53,18 +55,18 @@ async function fetchCategories() {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!response.ok) throw new Error("Gagal mengambil data kategori");
+
     const categories = await response.json();
 
+    // Tambahkan opsi kategori ke dropdown
     categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
-    productCategory.innerHTML = '<option value="">Pilih Kategori</option>';
-    categories.forEach((kategory) => {
-      const option = `<option value="${kategory.id_kategori}">${kategory.jenis_kategori}</option>`;
+    categories.forEach((category) => {
+      const option = `<option value="${category.jenis_kategori}">${category.jenis_kategori}</option>`;
       categoryFilter.innerHTML += option;
-      productCategory.innerHTML += option;
     });
   } catch (error) {
     console.error(error);
-    alert("Error saat memuat kategori");
+    Swal.fire("Error", "Gagal memuat kategori.", "error");
   }
 }
 
@@ -288,9 +290,8 @@ async function fetchProducts(categoryId = "") {
 
 // Tambahkan Event Listener untuk Filter Kategori
 categoryFilter.addEventListener("change", () => {
-  const selectedCategoryId = categoryFilter.value; // ID Kategori
-  console.log("Selected Category ID:", selectedCategoryId);
-  fetchProducts(selectedCategoryId);
+  const selectedCategoryName = categoryFilter.value; // Nama kategori
+  fetchProducts(selectedCategoryName);
 });
 
 // Fungsi parseJwt untuk mem-parse token JWT
