@@ -141,7 +141,7 @@ productForm.addEventListener("submit", async (e) => {
     "deskripsi",
     document.getElementById("productDescription").value
   );
-  formData.append("nama_kategori", selectedCategory);
+  formData.append("id_kategori", selectedCategory); // Pastikan nama parameter sesuai
   formData.append("harga", document.getElementById("productPrice").value);
   formData.append("qty", document.getElementById("productStock").value);
   if (document.getElementById("productImage").files[0]) {
