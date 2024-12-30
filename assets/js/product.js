@@ -11,7 +11,7 @@ const BASE_URL = "https://backend-eight-phi-75.vercel.app/api";
 
 // Fetch Produk
 
-async function fetchProducts(categoryName = "") {
+async function fetchProducts(selectedCategory = "") {
   Swal.fire({
     title: "Memuat Data Produk",
     text: "Silakan tunggu...",
@@ -25,14 +25,15 @@ async function fetchProducts(categoryName = "") {
     const response = await fetch(`${BASE_URL}/produk/all`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     if (!response.ok) throw new Error("Gagal mengambil data produk");
 
     const products = await response.json();
 
     // Filter berdasarkan jenis_kategori
-    const filteredProducts = categoryName
+    const filteredProducts = selectedCategory
       ? products.filter(
-          (product) => product.kategori.jenis_kategori === categoryName
+          (product) => product.kategori.jenis_kategori === selectedCategory
         )
       : products;
 
@@ -54,11 +55,12 @@ async function fetchCategories() {
     const response = await fetch(`${BASE_URL}/kategori/all`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     if (!response.ok) throw new Error("Gagal mengambil data kategori");
 
     const categories = await response.json();
 
-    // Tambahkan opsi kategori ke dropdown
+    // Tambahkan opsi ke dropdown filter
     categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
     categories.forEach((category) => {
       const option = `<option value="${category.jenis_kategori}">${category.jenis_kategori}</option>`;
@@ -290,8 +292,8 @@ async function fetchProducts(categoryId = "") {
 
 // Tambahkan Event Listener untuk Filter Kategori
 categoryFilter.addEventListener("change", () => {
-  const selectedCategoryName = categoryFilter.value; // Nama kategori
-  fetchProducts(selectedCategoryName);
+  const selectedCategory = categoryFilter.value; // Nama kategori
+  fetchProducts(selectedCategory);
 });
 
 // Fungsi parseJwt untuk mem-parse token JWT
