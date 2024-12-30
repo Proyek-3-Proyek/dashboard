@@ -156,12 +156,13 @@ productForm.addEventListener("submit", async (e) => {
   const formData = new FormData();
   formData.append("nama", productName);
   formData.append("deskripsi", productDescription);
-  formData.append("id_kategori", selectedCategory); // Pastikan nama parameter sesuai
-  formData.append("harga", productPrice);
-  formData.append("qty", productStock);
+  formData.append("id_kategori", Number(selectedCategory)); // Konversi ke number
+  formData.append("harga", Number(productPrice)); // Konversi ke number
+  formData.append("qty", Number(productStock)); // Konversi ke number
   formData.append("file", productImage);
 
   console.log("Form Data:", Object.fromEntries(formData.entries()));
+  console.log("Form Data (Debug):", [...formData.entries()]);
 
   try {
     const response = await fetch(
