@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchTransactions() {
     Swal.fire({
       title: "Memuat Data...",
-      text: "Mohon tunggu, data kategori sedang dimuat.",
+      text: "Mohon tunggu, data transaksi sedang dimuat.",
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
