@@ -23,6 +23,7 @@ async function fetchProducts(categoryId = "") {
     const products = await response.json();
 
     renderProducts(products);
+    Swal.close();
   } catch (error) {
     console.error(error);
     Swal.fire({
