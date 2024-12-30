@@ -11,6 +11,15 @@ const BASE_URL = "https://backend-eight-phi-75.vercel.app/api";
 
 // Fetch Produk
 async function fetchProducts(categoryId = "") {
+  Swal.fire({
+    title: "Memuat Data Produk",
+    text: "Silakan tunggu...",
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+
   try {
     const endpoint = categoryId
       ? `${BASE_URL}/produk/kategori/${categoryId}`
