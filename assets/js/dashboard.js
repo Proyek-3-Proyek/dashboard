@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
       text: "Anda tidak memiliki akses. Silakan login sebagai admin.",
       confirmButtonText: "OK",
     }).then(() => {
-      window.location.href =
-        "/login";
+      window.location.href = "/login";
     });
     return;
   }
@@ -24,8 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
       text: "Anda tidak memiliki akses ke halaman ini.",
       confirmButtonText: "OK",
     }).then(() => {
-      window.location.href =
-        "/login";
+      window.location.href = "/login";
     });
   }
 
@@ -45,8 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("token");
         Swal.fire("Logout Berhasil", "Anda telah logout.", "success").then(
           () => {
-            window.location.href =
-              "/login";
+            window.location.href = "/login";
           }
         );
       }
@@ -67,3 +64,59 @@ function parseJwt(token) {
 
   return JSON.parse(jsonPayload);
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const API_URL =
+    "https://backend-eight-phi-75.vercel.app/api/payment/transactions";
+
+  try {
+    // Fetch data from API
+    const response = await fetch(API_URL);
+    const transactions = await response.json();
+
+    // Process data to count product purchases
+    const productCounts = {};
+    transactions.forEach((transaction) => {
+      transaction.items.forEach((item) => {
+        if (!productCounts[item.productName]) {
+          productCounts[item.productName] = 0;
+        }
+        productCounts[item.productName] += item.quantity;
+      });
+    });
+
+    // Prepare data for Chart.js
+    const labels = Object.keys(productCounts);
+    const data = Object.values(productCounts);
+
+    // Render chart
+    const ctx = document
+      .getElementById("produkTerbanyakDibeliChart")
+      .getContext("2d");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Jumlah Terjual",
+            data: data,
+            backgroundColor: "rgba(54, 162, 235, 0.6)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching or processing data:", error);
+  }
+});
