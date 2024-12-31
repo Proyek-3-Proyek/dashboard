@@ -44,8 +44,11 @@ async function fetchProducts(categoryId = "") {
   }
 }
 
+let cachedCategories = [];
 /// Fetch Kategori
 async function fetchCategories() {
+  if (cachedCategories.length > 0) return cachedCategories;
+
   try {
     const response = await fetch(`${BASE_URL}/kategori/all`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -54,6 +57,7 @@ async function fetchCategories() {
     if (!response.ok) throw new Error("Gagal mengambil data kategori");
 
     const categories = await response.json();
+    cachedCategories = categories;
 
     categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
     productCategory.innerHTML = '<option value="">Pilih Kategori</option>';
@@ -63,12 +67,12 @@ async function fetchCategories() {
       categoryFilter.innerHTML += option;
       productCategory.innerHTML += option;
     });
-    console.log("Categories fetched:", categories); // Debugging data kategori
-    return categories; // Mengembalikan array kategori
+    console.log("Categories fetched:", categories);
+    return categories;
   } catch (error) {
     console.error(error);
     Swal.fire("Error", "Error saat memuat kategori", "error");
-    return []; // Mengembalikan array kosong jika terjadi error
+    return [];
   }
 }
 
@@ -108,7 +112,7 @@ function renderProducts(products) {
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // Ambil daftar kategori terlebih dahulu
+  // Gunakan kategori yang sudah di-cache
   const categories = await fetchCategories();
 
   // Validasi apakah categories berhasil diambil
@@ -118,7 +122,7 @@ productForm.addEventListener("submit", async (e) => {
   }
 
   // Ambil nilai dari form
-  const selectedCategory = productCategory.value; // ID kategori (misal: 4)
+  const selectedCategory = productCategory.value; // ID kategori
   const id = document.getElementById("productId")?.value; // Untuk update
   const productName = document.getElementById("productName").value;
   const productDescription =
@@ -127,11 +131,13 @@ productForm.addEventListener("submit", async (e) => {
   const productStock = document.getElementById("productStock").value;
   const productImage = document.getElementById("productImage").files[0];
 
+  console.log("Selected Category:", selectedCategory);
+  console.log("Categories Array:", categories);
+
   // Validasi kategori
-  const validCategory = categories.find(
-    (cat) => cat.id === Number(selectedCategory)
-  );
+  const validCategory = categories.find((cat) => cat.id == selectedCategory);
   if (!validCategory) {
+    console.error("Valid Category not found!");
     Swal.fire(
       "Error",
       "Kategori tidak valid. Pilih kategori yang benar.",
@@ -156,21 +162,17 @@ productForm.addEventListener("submit", async (e) => {
   const formData = new FormData();
   formData.append("nama", productName);
   formData.append("deskripsi", productDescription);
-  formData.append("nama_kategori", validCategory.jenis_kategori); // Nama kategori yang sesuai
+  formData.append("nama_kategori", validCategory.jenis_kategori);
   formData.append("harga", productPrice);
   formData.append("qty", productStock);
   formData.append("file", productImage);
 
-  console.log("Selected Category ID:", selectedCategory);
-  console.log("Selected Category Name:", validCategory.jenis_kategori);
-  console.log("Form Data:", Object.fromEntries(formData.entries()));
-
   try {
     const url = id
-      ? `${BASE_URL}/produk/update/${id}` // Update produk jika ada id
-      : `${BASE_URL}/produk/create`; // Create produk jika tidak ada id
+      ? `${BASE_URL}/produk/update/${id}`
+      : `${BASE_URL}/produk/create`;
 
-    const method = id ? "PUT" : "POST"; // Gunakan PUT untuk update, POST untuk create
+    const method = id ? "PUT" : "POST";
 
     const response = await fetch(url, {
       method: method,
@@ -186,7 +188,7 @@ productForm.addEventListener("submit", async (e) => {
       "success"
     );
     modal.classList.add("hidden");
-    fetchProducts(); // Memuat ulang daftar produk
+    fetchProducts();
   } catch (error) {
     console.error("Error:", error);
     Swal.fire("Error", error.message || "Terjadi kesalahan", "error");
