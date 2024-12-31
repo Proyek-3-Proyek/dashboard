@@ -107,24 +107,30 @@ function renderProducts(products) {
 // Tambah/Edit Produk
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const id = document.getElementById("productId").value;
-  const selectedCategory = productCategory.value; // String
+
+  // Ambil daftar kategori terlebih dahulu
   const categories = await fetchCategories();
 
-  // Debugging log
-  console.log("Selected Category:", selectedCategory);
-  console.log("Categories Array:", categories);
-
-  // Validasi kategori
+  // Validasi apakah categories berhasil diambil
   if (!Array.isArray(categories)) {
     Swal.fire("Error", "Gagal memuat kategori. Silakan coba lagi.", "error");
     return;
   }
 
+  // Ambil nilai dari form
+  const selectedCategory = productCategory.value; // ID kategori (misal: 4)
+  const id = document.getElementById("productId")?.value; // Untuk update
+  const productName = document.getElementById("productName").value;
+  const productDescription =
+    document.getElementById("productDescription").value;
+  const productPrice = document.getElementById("productPrice").value;
+  const productStock = document.getElementById("productStock").value;
+  const productImage = document.getElementById("productImage").files[0];
+
+  // Validasi kategori
   const validCategory = categories.find(
     (cat) => cat.id === Number(selectedCategory)
   );
-
   if (!validCategory) {
     Swal.fire(
       "Error",
@@ -133,13 +139,6 @@ productForm.addEventListener("submit", async (e) => {
     );
     return;
   }
-
-  const productName = document.getElementById("productName").value;
-  const productDescription =
-    document.getElementById("productDescription").value;
-  const productPrice = document.getElementById("productPrice").value;
-  const productStock = document.getElementById("productStock").value;
-  const productImage = document.getElementById("productImage").files[0];
 
   // Validasi input
   if (
@@ -153,26 +152,32 @@ productForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  // Siapkan data untuk dikirim
   const formData = new FormData();
   formData.append("nama", productName);
   formData.append("deskripsi", productDescription);
-  formData.append("nama_kategori", selectedCategory); // Sesuai backend
+  formData.append("nama_kategori", validCategory.jenis_kategori); // Nama kategori yang sesuai
   formData.append("harga", productPrice);
   formData.append("qty", productStock);
   formData.append("file", productImage);
 
+  console.log("Selected Category ID:", selectedCategory);
+  console.log("Selected Category Name:", validCategory.jenis_kategori);
   console.log("Form Data:", Object.fromEntries(formData.entries()));
-  console.log("Form Data (Debug):", [...formData.entries()]);
 
   try {
-    const response = await fetch(
-      id ? `${BASE_URL}/produk/update/${id}` : `${BASE_URL}/produk/create`,
-      {
-        method: id ? "PUT" : "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      }
-    );
+    const url = id
+      ? `${BASE_URL}/produk/update/${id}` // Update produk jika ada id
+      : `${BASE_URL}/produk/create`; // Create produk jika tidak ada id
+
+    const method = id ? "PUT" : "POST"; // Gunakan PUT untuk update, POST untuk create
+
+    const response = await fetch(url, {
+      method: method,
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+
     if (!response.ok) throw new Error(await response.text());
 
     Swal.fire(
@@ -181,7 +186,7 @@ productForm.addEventListener("submit", async (e) => {
       "success"
     );
     modal.classList.add("hidden");
-    fetchProducts();
+    fetchProducts(); // Memuat ulang daftar produk
   } catch (error) {
     console.error("Error:", error);
     Swal.fire("Error", error.message || "Terjadi kesalahan", "error");
