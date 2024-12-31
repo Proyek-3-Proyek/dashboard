@@ -158,41 +158,53 @@ productForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  // Siapkan data untuk dikirim
-  const formData = new FormData();
-  formData.append("nama", productName);
-  formData.append("deskripsi", productDescription);
-  formData.append("nama_kategori", validCategory.jenis_kategori);
-  formData.append("harga", productPrice);
-  formData.append("qty", productStock);
-  formData.append("file", productImage);
+  // Konfirmasi sebelum menyimpan
+  Swal.fire({
+    title: "Apakah Anda yakin?",
+    text: "Data produk akan disimpan.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Ya, simpan!",
+    cancelButtonText: "Batal",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      // Siapkan data untuk dikirim
+      const formData = new FormData();
+      formData.append("nama", productName);
+      formData.append("deskripsi", productDescription);
+      formData.append("nama_kategori", validCategory.jenis_kategori);
+      formData.append("harga", productPrice);
+      formData.append("qty", productStock);
+      formData.append("file", productImage);
 
-  try {
-    const url = id
-      ? `${BASE_URL}/produk/update/${id}`
-      : `${BASE_URL}/produk/create`;
+      try {
+        const url = id
+          ? `${BASE_URL}/produk/update/${id}`
+          : `${BASE_URL}/produk/create`;
 
-    const method = id ? "PUT" : "POST";
+        const method = id ? "PUT" : "POST";
 
-    const response = await fetch(url, {
-      method: method,
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
+        const response = await fetch(url, {
+          method: method,
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        });
 
-    if (!response.ok) throw new Error(await response.text());
+        if (!response.ok) throw new Error(await response.text());
 
-    Swal.fire(
-      "Berhasil!",
-      id ? "Produk berhasil diperbarui." : "Produk berhasil dibuat.",
-      "success"
-    );
-    modal.classList.add("hidden");
-    fetchProducts();
-  } catch (error) {
-    console.error("Error:", error);
-    Swal.fire("Error", error.message || "Terjadi kesalahan", "error");
-  }
+        Swal.fire(
+          "Berhasil!",
+          id ? "Produk berhasil diperbarui." : "Produk berhasil dibuat.",
+          "success"
+        );
+        modal.classList.add("hidden");
+        fetchProducts();
+      } catch (error) {
+        console.error("Error:", error);
+        Swal.fire("Error", error.message || "Terjadi kesalahan", "error");
+      }
+    }
+  });
 });
 
 // Hapus Produk
