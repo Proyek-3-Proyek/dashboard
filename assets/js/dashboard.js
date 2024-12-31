@@ -69,6 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const API_URL =
     "https://backend-eight-phi-75.vercel.app/api/payment/transactions";
   const token = localStorage.getItem("token");
+  let currentChart; // Menyimpan instance Chart.js
 
   try {
     const response = await fetch(API_URL, {
@@ -110,31 +111,57 @@ document.addEventListener("DOMContentLoaded", async () => {
     const labels = Object.keys(productCounts);
     const data = Object.values(productCounts);
 
-    const ctx = document
-      .getElementById("produkTerbanyakDibeliChart")
-      .getContext("2d");
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Jumlah Terjual",
-            data: data,
-            backgroundColor: "rgba(54, 162, 235, 0.6)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
+    // Fungsi untuk merender grafik
+    const renderChart = (type) => {
+      if (currentChart) {
+        currentChart.destroy(); // Hapus grafik sebelumnya sebelum membuat yang baru
+      }
+
+      const ctx = document
+        .getElementById("produkTerbanyakDibeliChart")
+        .getContext("2d");
+      currentChart = new Chart(ctx, {
+        type: type,
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Jumlah Terjual",
+              data: data,
+              backgroundColor: [
+                "rgba(54, 162, 235, 0.6)",
+                "rgba(255, 99, 132, 0.6)",
+                "rgba(255, 206, 86, 0.6)",
+                "rgba(75, 192, 192, 0.6)",
+                "rgba(153, 102, 255, 0.6)",
+                "rgba(255, 159, 64, 0.6)",
+              ],
+              borderColor: "rgba(54, 162, 235, 1)",
+              borderWidth: 1,
+            },
+          ],
         },
-      },
+        options: {
+          responsive: true,
+          scales:
+            type === "pie" || type === "doughnut"
+              ? {}
+              : {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+        },
+      });
+    };
+
+    // Render grafik awal (bar)
+    renderChart("bar");
+
+    // Tambahkan event listener untuk dropdown
+    document.getElementById("chartType").addEventListener("change", (event) => {
+      const chartType = event.target.value;
+      renderChart(chartType);
     });
   } catch (error) {
     console.error("Error fetching or processing data:", error);
