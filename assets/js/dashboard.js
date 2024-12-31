@@ -68,10 +68,22 @@ function parseJwt(token) {
 document.addEventListener("DOMContentLoaded", async () => {
   const API_URL =
     "https://backend-eight-phi-75.vercel.app/api/payment/transactions";
+  const token = localStorage.getItem("token"); // Ambil token dari localStorage
 
   try {
-    // Fetch data from API
-    const response = await fetch(API_URL);
+    // Fetch data from API dengan header Authorization
+    const response = await fetch(API_URL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Periksa apakah respons berhasil
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
     const transactions = await response.json();
 
     // Process data to count product purchases
@@ -118,5 +130,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   } catch (error) {
     console.error("Error fetching or processing data:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Gagal Memuat Data",
+      text: `Terjadi kesalahan: ${error.message}`,
+    });
   }
 });
