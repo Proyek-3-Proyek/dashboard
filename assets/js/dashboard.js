@@ -68,10 +68,9 @@ function parseJwt(token) {
 document.addEventListener("DOMContentLoaded", async () => {
   const API_URL =
     "https://backend-eight-phi-75.vercel.app/api/payment/transactions";
-  const token = localStorage.getItem("token"); // Ambil token dari localStorage
+  const token = localStorage.getItem("token");
 
   try {
-    // Fetch data from API dengan header Authorization
     const response = await fetch(API_URL, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -79,29 +78,38 @@ document.addEventListener("DOMContentLoaded", async () => {
       },
     });
 
-    // Periksa apakah respons berhasil
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const transactions = await response.json();
+    console.log("Respons API:", transactions); // Log struktur data
 
-    // Process data to count product purchases
     const productCounts = {};
-    transactions.forEach((transaction) => {
-      transaction.items.forEach((item) => {
-        if (!productCounts[item.productName]) {
-          productCounts[item.productName] = 0;
-        }
-        productCounts[item.productName] += item.quantity;
-      });
-    });
 
-    // Prepare data for Chart.js
+    // Jika respons adalah array
+    if (Array.isArray(transactions)) {
+      transactions.forEach((transaction) => {
+        const { nama_produk, jumlah } = transaction;
+
+        if (!productCounts[nama_produk]) {
+          productCounts[nama_produk] = 0;
+        }
+        productCounts[nama_produk] += jumlah;
+      });
+    } else {
+      // Jika respons adalah objek tunggal
+      const { nama_produk, jumlah } = transactions;
+
+      if (!productCounts[nama_produk]) {
+        productCounts[nama_produk] = 0;
+      }
+      productCounts[nama_produk] += jumlah;
+    }
+
     const labels = Object.keys(productCounts);
     const data = Object.values(productCounts);
 
-    // Render chart
     const ctx = document
       .getElementById("produkTerbanyakDibeliChart")
       .getContext("2d");
