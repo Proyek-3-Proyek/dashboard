@@ -59,43 +59,61 @@ const renderCategories = (categories) => {
   });
 };
 
-// Tambah/Edit Kategori
+// add kategori
 categoryForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const id = document.getElementById("categoryId").value;
   const jenis_kategori = document.getElementById("categoryName").value;
 
-  const endpoint = id
-    ? `${BASE_URL}/kategori/update/${id}`
-    : `${BASE_URL}/kategori/create`;
-  const method = id ? "PUT" : "POST";
-
-  try {
-    const response = await fetch(endpoint, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ jenis_kategori }),
-    });
-    if (!response.ok) throw new Error("Gagal menyimpan kategori");
-
-    Swal.fire({
-      icon: "success",
-      title: "Berhasil",
-      text: "Kategori berhasil disimpan.",
-    });
-    categoryModal.classList.add("hidden");
-    fetchCategories();
-  } catch (error) {
-    console.error(error);
-    Swal.fire({
-      icon: "error",
-      title: "Gagal",
-      text: "Gagal menyimpan kategori.",
-    });
+  // Validasi input
+  if (!jenis_kategori) {
+    Swal.fire("Error", "Nama kategori tidak boleh kosong.", "error");
+    return;
   }
+
+  // Konfirmasi sebelum menyimpan
+  Swal.fire({
+    title: "Apakah Anda yakin?",
+    text: "Data kategori akan disimpan.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Ya, simpan!",
+    cancelButtonText: "Batal",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const endpoint = id
+        ? `${BASE_URL}/kategori/update/${id}`
+        : `${BASE_URL}/kategori/create`;
+      const method = id ? "PUT" : "POST";
+
+      try {
+        const response = await fetch(endpoint, {
+          method,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ jenis_kategori }),
+        });
+        if (!response.ok) throw new Error("Gagal menyimpan kategori");
+
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil",
+          text: "Kategori berhasil disimpan.",
+        });
+        categoryModal.classList.add("hidden");
+        fetchCategories();
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Gagal menyimpan kategori.",
+        });
+      }
+    }
+  });
 });
 
 // Hapus Kategori
