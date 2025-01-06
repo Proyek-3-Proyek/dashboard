@@ -135,6 +135,10 @@ productForm.addEventListener("submit", async (e) => {
   console.log("Dropdown Value:", productCategory.value);
   console.log("Categories Array:", categories);
 
+  if (id && isNaN(Number(id))) {
+    Swal.fire("Error", "ID produk tidak valid.", "error");
+    return;
+  }
   // Validasi kategori
   const validCategory = categories.find(
     (cat) => cat.id_kategori == selectedCategory
