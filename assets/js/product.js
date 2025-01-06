@@ -135,7 +135,7 @@ productForm.addEventListener("submit", async (e) => {
   console.log("Dropdown Value:", productCategory.value);
   console.log("Categories Array:", categories);
 
-  if (id && isNaN(Number(id))) {
+  if (id && isNaN(Number(id_produk))) {
     Swal.fire("Error", "ID produk tidak valid.", "error");
     return;
   }
@@ -292,7 +292,7 @@ async function editProduct(id_produk) {
     if (!response.ok) throw new Error("Gagal mengambil data produk");
 
     const product = await response.json();
-    document.getElementById("productId").value = product.id;
+    document.getElementById("productId").value = product.id_produk;
     document.getElementById("productName").value = product.nama;
     document.getElementById("productDescription").value = product.deskripsi;
     document.getElementById("productPrice").value = product.harga;
