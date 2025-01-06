@@ -80,9 +80,7 @@ async function fetchCategories() {
 function renderProducts(products) {
   productList.innerHTML = "";
   products.forEach((product) => {
-    const kategori = product.kategori
-      ? product.kategori.jenis_kategori
-      : "Tidak Diketahui";
+    const kategori = product.kategori?.jenis_kategori || "Tidak Diketahui";
 
     const productCard = document.createElement("div");
     productCard.className = "bg-white p-4 rounded-lg shadow-md";
@@ -135,7 +133,7 @@ productForm.addEventListener("submit", async (e) => {
   console.log("Dropdown Value:", productCategory.value);
   console.log("Categories Array:", categories);
 
-  if (id && isNaN(Number(id_produk))) {
+  if (id && isNaN(Number(id))) {
     Swal.fire("Error", "ID produk tidak valid.", "error");
     return;
   }
@@ -178,6 +176,10 @@ productForm.addEventListener("submit", async (e) => {
       title: "Validasi Gagal",
       text: "Stok produk tidak boleh kurang dari 1.",
     });
+    return;
+  }
+  if (!id && !productImage) {
+    Swal.fire("Error", "Gambar produk wajib diunggah.", "error");
     return;
   }
 
@@ -284,6 +286,9 @@ async function editProduct(id_produk) {
     Swal.fire("Error", "ID produk tidak valid.", "error");
     return;
   }
+  console.log("Produk yang di-edit:", product);
+  console.log("ID Produk:", id);
+  console.log("Form Data:", formData);
 
   try {
     const response = await fetch(`${BASE_URL}/produk/${id_produk}`, {
@@ -298,7 +303,7 @@ async function editProduct(id_produk) {
     document.getElementById("productPrice").value = product.harga;
     document.getElementById("productStock").value = product.qty;
     document.getElementById("productCategory").value =
-      product.kategori.jenis_kategori;
+      product.kategori.id_kategori;
 
     modalTitle.textContent = "Edit Produk";
     modal.classList.remove("hidden");
@@ -314,16 +319,18 @@ fetchCategories();
 
 // Modal Handling
 openModal.addEventListener("click", () => {
-  productForm.reset();
-  document.getElementById("productId").value = "";
+  productForm.reset(); // Reset semua input form
+  document.getElementById("productId").value = ""; // Reset ID produk
+  document.getElementById("productCategory").value = ""; // Reset kategori
   modalTitle.textContent = "Tambah Produk";
   modal.classList.remove("hidden");
 });
+
 closeModal.addEventListener("click", () => modal.classList.add("hidden"));
 
 document.addEventListener("DOMContentLoaded", () => {
   // Periksa token di localStorage
-  const token = localStorage.getItem("token");
+  let token = localStorage.getItem("token");
 
   if (!token) {
     Swal.fire({
