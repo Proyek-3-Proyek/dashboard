@@ -136,7 +136,10 @@ productForm.addEventListener("submit", async (e) => {
   console.log("Categories Array:", categories);
 
   // Validasi kategori
-  const validCategory = categories.find((cat) => cat.id == selectedCategory);
+  const validCategory = categories.find(
+    (cat) => cat.id_kategori == selectedCategory
+  );
+
   if (!validCategory) {
     console.error("Valid Category not found!");
     Swal.fire(
