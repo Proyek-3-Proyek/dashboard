@@ -145,6 +145,23 @@ productForm.addEventListener("submit", async (e) => {
     );
     return;
   }
+  if (productPrice < 1000) {
+    Swal.fire({
+      icon: "error",
+      title: "Validasi Gagal",
+      text: "Harga produk tidak boleh kurang dari 1000.",
+    });
+    return;
+  }
+
+  if (productStock < 1) {
+    Swal.fire({
+      icon: "error",
+      title: "Validasi Gagal",
+      text: "Stok produk tidak boleh kurang dari 1.",
+    });
+    return;
+  }
 
   // Validasi input
   if (
