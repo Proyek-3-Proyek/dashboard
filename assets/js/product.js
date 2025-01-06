@@ -146,6 +146,16 @@ productForm.addEventListener("submit", async (e) => {
     );
     return;
   }
+
+  if (!selectedCategory || selectedCategory === "") {
+    Swal.fire(
+      "Error",
+      "Silakan pilih kategori yang valid sebelum menyimpan.",
+      "error"
+    );
+    return;
+  }
+
   if (productPrice < 1000) {
     Swal.fire({
       icon: "error",
