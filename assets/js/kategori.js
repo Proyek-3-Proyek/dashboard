@@ -129,10 +129,13 @@ const deleteCategory = async (id_kategori) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/kategori/delete/${id_kategori}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await fetch(
+          `${BASE_URL}/kategori/delete/${id_kategori}`,
+          {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (!response.ok) throw new Error("Gagal menghapus kategori");
 
         Swal.fire({
