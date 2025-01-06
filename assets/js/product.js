@@ -97,7 +97,7 @@ function renderProducts(products) {
       <p class="text-gray-500">Stok: ${product.qty}</p>
       <div class="mt-4 space-x-2">
         <button class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" onclick="editProduct(${
-          product.id
+          product.id_produk
         })">Edit</button>
         <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="deleteProduct(${
           product.id_produk
@@ -275,9 +275,14 @@ async function deleteProduct(id_produk) {
 }
 
 // Edit Produk
-async function editProduct(id) {
+async function editProduct(id_produk) {
+  if (!id_produk) {
+    Swal.fire("Error", "ID produk tidak valid.", "error");
+    return;
+  }
+
   try {
-    const response = await fetch(`${BASE_URL}/produk/${id}`, {
+    const response = await fetch(`${BASE_URL}/produk/${id_produk}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!response.ok) throw new Error("Gagal mengambil data produk");
