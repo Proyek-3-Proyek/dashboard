@@ -286,9 +286,7 @@ async function editProduct(id_produk) {
     Swal.fire("Error", "ID produk tidak valid.", "error");
     return;
   }
-  console.log("Produk yang di-edit:", product);
-  console.log("ID Produk:", id);
-  console.log("Form Data:", formData);
+  console.log("ID Produk yang di-edit:", id_produk); // Log ID produk yang diterima
 
   try {
     const response = await fetch(`${BASE_URL}/produk/${id_produk}`, {
@@ -297,6 +295,9 @@ async function editProduct(id_produk) {
     if (!response.ok) throw new Error("Gagal mengambil data produk");
 
     const product = await response.json();
+    console.log("Data Produk yang Diterima dari API:", product); // Log respons API
+
+    // Isi elemen form dengan data produk
     document.getElementById("productId").value = product.id_produk;
     document.getElementById("productName").value = product.nama;
     document.getElementById("productDescription").value = product.deskripsi;
@@ -305,10 +306,19 @@ async function editProduct(id_produk) {
     document.getElementById("productCategory").value =
       product.kategori.id_kategori;
 
+    console.log("Form Setelah Diisi:", {
+      id_produk: product.id_produk,
+      nama: product.nama,
+      deskripsi: product.deskripsi,
+      harga: product.harga,
+      qty: product.qty,
+      id_kategori: product.kategori.id_kategori,
+    }); // Log elemen form setelah diisi
+
     modalTitle.textContent = "Edit Produk";
     modal.classList.remove("hidden");
   } catch (error) {
-    console.error(error);
+    console.error("Error:", error);
     Swal.fire("Error", "Error saat mengambil data produk", "error");
   }
 }
