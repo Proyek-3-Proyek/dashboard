@@ -100,7 +100,7 @@ function renderProducts(products) {
           product.id
         })">Edit</button>
         <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="deleteProduct(${
-          product.id
+          product.id_produk
         })">Hapus</button>
       </div>
     `;
@@ -239,7 +239,12 @@ productForm.addEventListener("submit", async (e) => {
 });
 
 // Hapus Produk
-async function deleteProduct(id) {
+async function deleteProduct(id_produk) {
+  if (!id_produk) {
+    Swal.fire("Error", "ID produk tidak valid.", "error");
+    return;
+  }
+
   Swal.fire({
     title: "Konfirmasi Hapus",
     text: "Apakah Anda yakin ingin menghapus produk ini?",
@@ -252,17 +257,18 @@ async function deleteProduct(id) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/produk/delete/${id}`, {
+        const response = await fetch(`${BASE_URL}/produk/delete/${id_produk}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
+
         if (!response.ok) throw new Error("Gagal menghapus produk");
 
         Swal.fire("Dihapus!", "Produk berhasil dihapus.", "success");
         fetchProducts();
       } catch (error) {
         console.error(error);
-        Swal.fire("Error", "Terjadi kesalahan saat menghapus produk", "error");
+        Swal.fire("Error", "Terjadi kesalahan saat menghapus produk.", "error");
       }
     }
   });
