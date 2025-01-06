@@ -252,7 +252,7 @@ async function deleteProduct(id) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/produk/delete/${id}`, {
+        const response = await fetch(`${BASE_URL}/produk/delete/${id_produk}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
