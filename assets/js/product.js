@@ -63,7 +63,7 @@ async function fetchCategories() {
     productCategory.innerHTML = '<option value="">Pilih Kategori</option>';
 
     categories.forEach((category) => {
-      const option = `<option value="${category.id}">${category.jenis_kategori}</option>`;
+      const option = `<option value="${category.id_kategori}">${category.jenis_kategori}</option>`;
       categoryFilter.innerHTML += option;
       productCategory.innerHTML += option;
     });
@@ -353,8 +353,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Event listener untuk filter kategori
   categoryFilter.addEventListener("change", () => {
     const selectedCategoryId = categoryFilter.value; // Ambil nilai dari dropdown
-    // console.log("Selected Category ID:", selectedCategoryId); // Log untuk debug
-    // console.log("Category Filter InnerHTML:", categoryFilter.innerHTML);
+    console.log("Selected Category ID:", selectedCategoryId); // Log untuk debug
+    console.log("Category Filter InnerHTML:", categoryFilter.innerHTML);
 
     // Panggil fetchProducts dengan ID kategori yang dipilih
     fetchProducts(selectedCategoryId || ""); // Jika kosong, ambil semua produk
