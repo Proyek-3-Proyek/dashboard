@@ -131,8 +131,22 @@ productForm.addEventListener("submit", async (e) => {
   const productStock = document.getElementById("productStock").value;
   const productImage = document.getElementById("productImage").files[0];
 
-  console.log("Selected Category:", selectedCategory);
-  console.log("Categories Array:", categories);
+  Swal.fire({
+    title: "Debugging Info",
+    html: `
+      <strong>Selected Category:</strong> ${selectedCategory || "undefined"}<br>
+      <strong>Dropdown Value:</strong> ${
+        productCategory.value || "undefined"
+      }<br>
+      <strong>Categories Array:</strong><pre>${JSON.stringify(
+        categories,
+        null,
+        2
+      )}</pre>
+    `,
+    icon: "info",
+    confirmButtonText: "OK",
+  });
 
   // Validasi kategori
   const validCategory = categories.find((cat) => cat.id == selectedCategory);
