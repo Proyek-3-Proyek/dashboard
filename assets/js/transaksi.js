@@ -144,6 +144,53 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchTransactions();
 });
 
+// calculasiPendapatan
+async function calculateTotalSales() {
+  const token = localStorage.getItem("token"); // Token untuk autentikasi
+  const apiUrl = "https://backend-eight-phi-75.vercel.app/api/payment/transactions";
+
+  try {
+    // Fetch data transaksi
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Gagal mengambil data transaksi");
+    }
+
+    const transactions = await response.json();
+
+    // Inisialisasi variabel untuk total
+    let totalPendapatan = 0;
+    let totalProdukTerjual = 0;
+
+    // Proses data transaksi
+    transactions.forEach((transaction) => {
+      if (transaction.status === "paid") {
+        totalPendapatan += transaction.gross_amount * transaction.jumlah;
+        totalProdukTerjual += transaction.jumlah;
+      }
+    });
+
+    // Tampilkan hasil
+    console.log(`Total Pendapatan: Rp${totalPendapatan.toLocaleString()}`);
+    console.log(`Total Produk Terjual: ${totalProdukTerjual}`);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+// Panggil fungsi untuk menghitung total
+calculateTotalSales();
+
+
+
+
 function parseJwt(token) {
   try {
     const base64Url = token.split(".")[1];
