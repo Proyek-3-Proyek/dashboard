@@ -71,11 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 transaction.status
               )} px-2 py-1 rounded">${transaction.status}</span>
             </td>
-            <td class="px-4 py-2 text-center">
-              <button onclick="viewDetails('${
-                transaction.transaksi_id
-              }')" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Detail</button>
-            </td>
+            
           `;
 
         transactionTable.appendChild(row);
