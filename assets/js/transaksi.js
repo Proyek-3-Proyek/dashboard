@@ -215,34 +215,128 @@ function parseJwt(token) {
   }
 }
 
+// ----------------------fecth pendapatan diagram-------------------------------------------------------------
+async function fetchPendapatanData() {
+  const token = localStorage.getItem("token"); // Token autentikasi
+  const apiUrl =
+    "https://backend-eight-phi-75.vercel.app/api/payment/transactions";
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Gagal mengambil data transaksi.");
+    }
+
+    const transactions = await response.json();
+
+    // Proses pendapatan
+    const pendapatan = {
+      day: new Array(24).fill(0),
+      week: new Array(7).fill(0),
+      month: new Array(31).fill(0),
+    };
+
+    transactions.forEach((transaction) => {
+      if (transaction.status === "paid") {
+        const createdAt = new Date(transaction.created_at);
+        const grossAmount = transaction.gross_amount;
+
+        // Hari ini
+        if (isToday(createdAt)) {
+          const hour = createdAt.getHours();
+          pendapatan.day[hour] += grossAmount;
+        }
+
+        // Minggu ini
+        if (isThisWeek(createdAt)) {
+          const dayOfWeek = createdAt.getDay();
+          pendapatan.week[dayOfWeek] += grossAmount;
+        }
+
+        // Bulan ini
+        if (isThisMonth(createdAt)) {
+          const dateOfMonth = createdAt.getDate() - 1;
+          pendapatan.month[dateOfMonth] += grossAmount;
+        }
+      }
+    });
+
+    // Perbarui diagram dengan data pendapatan
+    updateChart(pendapatan);
+  } catch (error) {
+    console.error("Error:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Terjadi Kesalahan",
+      text: "Gagal mengambil data transaksi.",
+    });
+  }
+}
+
+function isToday(date) {
+  const today = new Date();
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+}
+
+function isThisWeek(date) {
+  const now = new Date();
+  const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1));
+  const endOfWeek = new Date(startOfWeek.setDate(startOfWeek.getDate() + 6));
+  return date >= startOfWeek && date <= endOfWeek;
+}
+
+function isThisMonth(date) {
+  const today = new Date();
+  return (
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+}
+
+function updateChart(pendapatan) {
+  const labels = {
+    day: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+    week: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+    month: Array.from({ length: 31 }, (_, i) => `${i + 1}`),
+  };
+
+  // Default filter ke "week"
+  const filter = document.getElementById("filterPendapatan").value;
+  pendapatanChart.data.labels = labels[filter];
+  pendapatanChart.data.datasets[0].data = pendapatan[filter];
+  pendapatanChart.update();
+}
+
+// Event Listener untuk filter
+document
+  .getElementById("filterPendapatan")
+  .addEventListener("change", fetchPendapatanData);
+
+// Panggil fetchPendapatanData setelah halaman dimuat
+document.addEventListener("DOMContentLoaded", fetchPendapatanData);
+
 // ----------------------diagram total pendapatan-------------------------------
 const ctx = document.getElementById("pendapatanChart").getContext("2d");
 
-const data = {
-  day: [300, 500, 700, 900, 1200],
-  week: [4000, 4500, 4800, 5200, 5800, 6000, 6500],
-  month: [
-    10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000, 26000, 28000, 30000,
-    32000,
-  ],
-};
-
-// Labels (default untuk minggu ini)
-const labels = {
-  day: ["08:00", "10:00", "12:00", "14:00", "16:00"],
-  week: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"],
-  month: ["1", "5", "10", "15", "20", "25", "30"],
-};
-
-// Inisialisasi Chart.js
-let pendapatanChart = new Chart(ctx, {
-  type: "line", // Gunakan tipe diagram garis
+const pendapatanChart = new Chart(ctx, {
+  type: "line",
   data: {
-    labels: labels["week"], // Default adalah "Minggu Ini"
+    labels: [], // Akan diperbarui saat data diterima
     datasets: [
       {
         label: "Pendapatan (Rp)",
-        data: data["week"], // Data default
+        data: [],
         borderColor: "#4CAF50",
         backgroundColor: "rgba(76, 175, 80, 0.1)",
         borderWidth: 2,
@@ -259,12 +353,4 @@ let pendapatanChart = new Chart(ctx, {
       },
     },
   },
-});
-
-// Event Listener untuk Filter
-document.getElementById("filterPendapatan").addEventListener("change", (e) => {
-  const selected = e.target.value; // Ambil nilai filter (day/week/month)
-  pendapatanChart.data.labels = labels[selected]; // Update label
-  pendapatanChart.data.datasets[0].data = data[selected]; // Update data
-  pendapatanChart.update(); // Perbarui diagram
 });
