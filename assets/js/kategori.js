@@ -51,8 +51,8 @@ const renderCategories = (categories) => {
     categoryCard.innerHTML = `
       <h3 class="text-lg font-semibold">${category.jenis_kategori}</h3>
       <div class="mt-4 space-x-2">
-        <button class="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600" onclick="editCategory(${category.id}, '${category.jenis_kategori}')">Edit</button>
-        <button class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600" onclick="deleteCategory(${category.id})">Hapus</button>
+        <button class="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600" onclick="editCategory(${category.id_kategori}, '${category.jenis_kategori}')">Edit</button>
+        <button class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600" onclick="deleteCategory(${category.id_kategori})">Hapus</button>
       </div>
     `;
     categoryList.appendChild(categoryCard);
@@ -117,7 +117,7 @@ categoryForm.addEventListener("submit", async (e) => {
 });
 
 // Hapus Kategori
-const deleteCategory = async (id) => {
+const deleteCategory = async (id_kategori) => {
   Swal.fire({
     title: "Hapus Kategori?",
     text: "Yakin ingin menghapus kategori ini?",
@@ -129,7 +129,7 @@ const deleteCategory = async (id) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/kategori/delete/${id}`, {
+        const response = await fetch(`${BASE_URL}/kategori/delete/${id_kategori}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -154,8 +154,8 @@ const deleteCategory = async (id) => {
 };
 
 // Edit Kategori
-const editCategory = (id, name) => {
-  document.getElementById("categoryId").value = id;
+const editCategory = (id_kategori, name) => {
+  document.getElementById("categoryId").value = id_kategori;
   document.getElementById("categoryName").value = name;
   categoryModalTitle.textContent = "Edit Kategori";
   categoryModal.classList.remove("hidden");
