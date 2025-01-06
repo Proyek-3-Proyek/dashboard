@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kelola Transaksi</title>
     <link href="./assets/css/styles.css" rel="stylesheet" />
+
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
       rel="stylesheet"
@@ -13,6 +14,7 @@
       src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"
       crossorigin="anonymous"
     ></script>
+
   </head>
   <body class="bg-gray-100">
     <div class="flex h-screen">
@@ -70,17 +72,57 @@
       <!-- Main Content -->
       <main class="flex-1 ml-64 p-6 overflow-y-auto">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Rekap Transaksi</h1>
-        <div class="mt-8 mb-10 pb-8 bg-white shadow-md rounded-lg p-6">
-          <h2 class="text-xl font-semibold mb-4">Ringkasan Penjualan</h2>
-          <p class="text-lg">
-            Total Produk Terjual:
-            <span id="totalProduk" class="font-bold">0</span>
-          </p>
-          <p class="text-lg">
-            Total Pendapatan:
-            <span id="totalPendapatan" class="font-bold">Rp0</span>
-          </p>
+        <div class="flex flex-row-reverse gap-6 mt-6 mb-4 ">
+          <!-- Total Produk Terjual -->
+          <div
+            class="flex items-center bg-orange-100 rounded-lg shadow-md p-6 mr-2 w-full max-w-sm"
+          >
+            <div
+              class="flex items-center pr-7 justify-center bg-orange-200 rounded-full h-12 w-12"
+            >
+              <i class="fa-solid fa-box text-orange-600 text-xl"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600 ">
+                Total Produk Terjual
+              </p>
+              <p class="text-2xl font-bold text-gray-800 " id="totalProduk">0</p>
+            </div>
+          </div>
+
+          <!-- Total Pendapatan -->
+          <div
+            class="flex items-center bg-green-100 rounded-lg shadow-md p-6 mr-2 w-full max-w-sm"
+          >
+            <div
+              class="flex items-center pr-7 justify-center bg-green-200 rounded-full h-12 w-12"
+            >
+              <i class="fa-solid fa-dollar-sign text-green-600 text-xl"></i>
+            </div>
+            <div class="ml-5">
+              <p class="text-sm font-medium text-gray-600">Total Pendapatan</p>
+              <p class="text-2xl font-bold text-gray-800" id="totalPendapatan">
+                Rp0
+              </p>
+            </div>
+          </div>
+          <div
+            class="flex items-center bg-green-100 rounded-lg shadow-md p-6 mr-2 w-full max-w-sm"
+          >
+            <div
+              class="flex items-center pr-7 justify-center bg-green-200 rounded-full h-12 w-12"
+            >
+            <i class="fa-solid fa-receipt"></i>
+            </div>
+            <div class="ml-5">
+              <p class="text-sm font-medium text-gray-600">Total Pesanan </p>
+              <p class="text-2xl font-bold text-gray-800" id="totalPendapatan">
+                0
+              </p>
+            </div>
+          </div>
         </div>
+
         <!-- Tabel Transaksi -->
         <table class="w-full bg-white rounded-lg shadow-md">
           <thead class="bg-gray-200">
