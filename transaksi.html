@@ -14,7 +14,10 @@
       src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"
       crossorigin="anonymous"
     ></script>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body class="bg-gray-100">
     <div class="flex h-screen">
@@ -72,7 +75,7 @@
       <!-- Main Content -->
       <main class="flex-1 ml-64 p-6 overflow-y-auto">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Rekap Transaksi</h1>
-        <div class="flex flex-row-reverse gap-6 mt-6 mb-4 ">
+        <div class="flex flex-row-reverse gap-6 mt-6 mb-4">
           <!-- Total Produk Terjual -->
           <div
             class="flex items-center bg-orange-100 rounded-lg shadow-md p-6 mr-2 w-full max-w-sm"
@@ -83,10 +86,10 @@
               <i class="fa-solid fa-box text-orange-600 text-xl"></i>
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600 ">
+              <p class="text-sm font-medium text-gray-600">
                 Total Produk Terjual
               </p>
-              <p class="text-2xl font-bold text-gray-800 " id="totalProduk">0</p>
+              <p class="text-2xl font-bold text-gray-800" id="totalProduk">0</p>
             </div>
           </div>
 
@@ -112,16 +115,32 @@
             <div
               class="flex items-center pr-7 justify-center bg-green-200 rounded-full h-12 w-12"
             >
-            <i class="fa-solid fa-receipt"></i>
+              <i class="fa-solid fa-receipt"></i>
             </div>
             <div class="ml-5">
-              <p class="text-sm font-medium text-gray-600">Total Pesanan </p>
+              <p class="text-sm font-medium text-gray-600">Total Pesanan</p>
               <p class="text-2xl font-bold text-gray-800" id="totalPendapatan">
                 0
               </p>
             </div>
           </div>
         </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Total Pendapatan</h2>
+            <select
+              id="filterPendapatan"
+              class="bg-gray-100 border border-gray-300 rounded p-2 text-gray-600 text-sm"
+            >
+              <option value="day">Hari Ini</option>
+              <option value="week">Minggu Ini</option>
+              <option value="month">Bulan Ini</option>
+            </select>
+          </div>
+          <canvas id="pendapatanChart" class="w-full h-64"></canvas>
+        </div>
+        
 
         <!-- Tabel Transaksi -->
         <table class="w-full bg-white rounded-lg shadow-md">
@@ -132,7 +151,6 @@
               <th class="text-left px-4 py-2">Waktu</th>
               <th class="text-left px-4 py-2">Total</th>
               <th class="text-left px-4 py-2">Status</th>
-              
             </tr>
           </thead>
           <tbody id="transactionTable" class="divide-y divide-gray-200">

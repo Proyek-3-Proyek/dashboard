@@ -214,3 +214,57 @@ function parseJwt(token) {
     return null;
   }
 }
+
+// ----------------------diagram total pendapatan-------------------------------
+const ctx = document.getElementById("pendapatanChart").getContext("2d");
+
+const data = {
+  day: [300, 500, 700, 900, 1200],
+  week: [4000, 4500, 4800, 5200, 5800, 6000, 6500],
+  month: [
+    10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000, 26000, 28000, 30000,
+    32000,
+  ],
+};
+
+// Labels (default untuk minggu ini)
+const labels = {
+  day: ["08:00", "10:00", "12:00", "14:00", "16:00"],
+  week: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"],
+  month: ["1", "5", "10", "15", "20", "25", "30"],
+};
+
+// Inisialisasi Chart.js
+let pendapatanChart = new Chart(ctx, {
+  type: "line", // Gunakan tipe diagram garis
+  data: {
+    labels: labels["week"], // Default adalah "Minggu Ini"
+    datasets: [
+      {
+        label: "Pendapatan (Rp)",
+        data: data["week"], // Data default
+        borderColor: "#4CAF50",
+        backgroundColor: "rgba(76, 175, 80, 0.1)",
+        borderWidth: 2,
+        tension: 0.3,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+      },
+    },
+  },
+});
+
+// Event Listener untuk Filter
+document.getElementById("filterPendapatan").addEventListener("change", (e) => {
+  const selected = e.target.value; // Ambil nilai filter (day/week/month)
+  pendapatanChart.data.labels = labels[selected]; // Update label
+  pendapatanChart.data.datasets[0].data = data[selected]; // Update data
+  pendapatanChart.update(); // Perbarui diagram
+});
