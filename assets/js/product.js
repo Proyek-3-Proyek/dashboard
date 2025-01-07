@@ -310,18 +310,18 @@ async function editProduct(id_produk) {
     document.getElementById("productCategory").value =
       product.kategori.id_kategori;
 
-    // Simpan nama gambar lama di input hidden
-    document.getElementById("oldProductImage").value = product.gambar;
+    // // Simpan nama gambar lama di input hidden
+    // document.getElementById("oldProductImage").value = product.gambar;
 
-    // Menampilkan gambar lama jika ada
-    const previewOldImage = document.getElementById("previewOldImage");
-    const oldImageContainer = document.getElementById("oldImageContainer");
-    if (product.gambar) {
-      previewOldImage.src = `https://qzbythadanrtksusxdtq.supabase.co/storage/v1/object/public/gambar/${product.gambar}`;
-      oldImageContainer.classList.remove("hidden"); // Tampilkan container gambar lama
-    } else {
-      oldImageContainer.classList.add("hidden"); // Sembunyikan jika tidak ada gambar
-    }
+    // // Menampilkan gambar lama jika ada
+    // const previewOldImage = document.getElementById("previewOldImage");
+    // const oldImageContainer = document.getElementById("oldImageContainer");
+    // if (product.gambar) {
+    //   previewOldImage.src = `https://qzbythadanrtksusxdtq.supabase.co/storage/v1/object/public/gambar/${product.gambar}`;
+    //   oldImageContainer.classList.remove("hidden"); // Tampilkan container gambar lama
+    // } else {
+    //   oldImageContainer.classList.add("hidden"); // Sembunyikan jika tidak ada gambar
+    // }
 
     console.log("Form Setelah Diisi:", {
       id_produk: product.id_produk,
