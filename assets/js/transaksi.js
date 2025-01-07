@@ -67,7 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
               transaction.created_at
             ).toLocaleString()}</td>
             <td class="px-4 py-2">Rp${transaction.gross_amount.toLocaleString()}</td>
-            <td class="px-4 py-2">${transaction.gross_amount.toLocaleString() * transaction.jumlah}</td>
+            <td class="px-4 py-2">${
+              transaction.gross_amount * transaction.jumlah
+            }</td>
             <td class="px-4 py-2">
               <span class="${getStatusClass(
                 transaction.status
