@@ -292,7 +292,6 @@ async function editProduct(id_produk) {
     Swal.fire("Error", "ID produk tidak valid.", "error");
     return;
   }
-  console.log("ID Produk yang di-edit:", id_produk); // Log ID produk yang diterima
 
   try {
     const response = await fetch(`${BASE_URL}/produk/${id_produk}`, {
@@ -301,7 +300,6 @@ async function editProduct(id_produk) {
     if (!response.ok) throw new Error("Gagal mengambil data produk");
 
     const product = await response.json();
-    console.log("Data Produk yang Diterima dari API:", product); // Log respons API
 
     // Isi elemen form dengan data produk
     document.getElementById("productId").value = product.id_produk;
@@ -312,16 +310,17 @@ async function editProduct(id_produk) {
     document.getElementById("productCategory").value =
       product.kategori.id_kategori;
 
-    // Menyimpan gambar lama di input hidden
+    // Simpan nama gambar lama di input hidden
     document.getElementById("oldProductImage").value = product.gambar;
 
-    // Menampilkan gambar lama di modal
+    // Menampilkan gambar lama jika ada
     const previewOldImage = document.getElementById("previewOldImage");
+    const oldImageContainer = document.getElementById("oldImageContainer");
     if (product.gambar) {
       previewOldImage.src = `https://qzbythadanrtksusxdtq.supabase.co/storage/v1/object/public/gambar/${product.gambar}`;
-      previewOldImage.classList.remove("hidden"); // Tampilkan gambar
+      oldImageContainer.classList.remove("hidden"); // Tampilkan container gambar lama
     } else {
-      previewOldImage.classList.add("hidden"); // Sembunyikan jika tidak ada gambar
+      oldImageContainer.classList.add("hidden"); // Sembunyikan jika tidak ada gambar
     }
 
     console.log("Form Setelah Diisi:", {

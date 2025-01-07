@@ -169,22 +169,28 @@
                 <label class="block text-sm font-medium text-gray-700"
                   >Gambar Produk</label
                 >
+
+                <!-- Input file untuk mengganti gambar -->
                 <input
                   id="productImage"
                   type="file"
                   class="w-full border border-gray-300 rounded px-3 py-2"
                 />
-                <input
-                  id="oldProductImage"
-                  type="file"
-                  class="w-full border border-gray-300 rounded px-3 py-2"
-                />
+
+                <!-- Input hidden untuk menyimpan nama gambar lama -->
                 <input type="hidden" id="oldProductImage" />
-                <img
-                  id="previewOldImage"
-                  class="w-full h-40 object-cover rounded mt-4 hidden"
-                  alt="Gambar Lama Produk"
-                />
+
+                <!-- Gambar lama -->
+                <div id="oldImageContainer" class="mt-4 hidden">
+                  <label class="block text-sm font-medium text-gray-700"
+                    >Gambar Lama</label
+                  >
+                  <img
+                    id="previewOldImage"
+                    class="w-full h-40 object-cover rounded mt-4"
+                    alt="Gambar Lama Produk"
+                  />
+                </div>
               </div>
               <div class="flex justify-end space-x-4">
                 <button
