@@ -311,7 +311,6 @@ async function editProduct(id_produk) {
     document.getElementById("productStock").value = product.qty;
     document.getElementById("productCategory").value =
       product.kategori.id_kategori;
-    document.getElementById("oldProductImage").value = product.gambar;
 
     console.log("Form Setelah Diisi:", {
       id_produk: product.id_produk,
