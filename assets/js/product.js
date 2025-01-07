@@ -128,6 +128,7 @@ productForm.addEventListener("submit", async (e) => {
   const productPrice = document.getElementById("productPrice").value;
   const productStock = document.getElementById("productStock").value;
   const productImage = document.getElementById("productImage").files[0];
+  const oldProductImage = document.getElementById("oldProductImage").value;
 
   console.log("Selected Category:", selectedCategory);
   console.log("Dropdown Value:", productCategory.value);
@@ -212,7 +213,12 @@ productForm.addEventListener("submit", async (e) => {
       formData.append("nama_kategori", validCategory.jenis_kategori);
       formData.append("harga", productPrice);
       formData.append("qty", productStock);
-      formData.append("file", productImage);
+      if (id && !productImage) {
+        // Jika tidak ada gambar baru, gunakan gambar lama
+        formData.append("gambar", oldProductImage);
+      } else if (productImage) {
+        formData.append("file", productImage);
+      }
 
       try {
         const url = id
@@ -305,6 +311,7 @@ async function editProduct(id_produk) {
     document.getElementById("productStock").value = product.qty;
     document.getElementById("productCategory").value =
       product.kategori.id_kategori;
+    document.getElementById("oldProductImage").value = product.gambar;
 
     console.log("Form Setelah Diisi:", {
       id_produk: product.id_produk,
@@ -313,6 +320,7 @@ async function editProduct(id_produk) {
       harga: product.harga,
       qty: product.qty,
       id_kategori: product.kategori.id_kategori,
+      gambar : product.gambar
     }); // Log elemen form setelah diisi
 
     modalTitle.textContent = "Edit Produk";
