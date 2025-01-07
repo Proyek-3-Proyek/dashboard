@@ -320,7 +320,7 @@ async function editProduct(id_produk) {
       harga: product.harga,
       qty: product.qty,
       id_kategori: product.kategori.id_kategori,
-      gambar : product.gambar
+      gambar: product.gambar,
     }); // Log elemen form setelah diisi
 
     modalTitle.textContent = "Edit Produk";
@@ -426,4 +426,14 @@ function parseJwt(token) {
   );
 
   return JSON.parse(jsonPayload);
+}
+
+document.getElementById("oldProductImage").value = product.gambar;
+
+const previewOldImage = document.getElementById("previewOldImage");
+if (product.gambar) {
+  previewOldImage.src = `https://qzbythadanrtksusxdtq.supabase.co/storage/v1/object/public/gambar/${product.gambar}`;
+  previewOldImage.classList.remove("hidden"); // Tampilkan gambar
+} else {
+  previewOldImage.classList.add("hidden"); // Sembunyikan jika tidak ada gambar
 }
