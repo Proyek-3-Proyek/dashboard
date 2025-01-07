@@ -354,3 +354,42 @@ const pendapatanChart = new Chart(ctx, {
     },
   },
 });
+
+// -----------------Total Pesanan--------------------------------
+async function fetchTotalPesanan() {
+  const token = localStorage.getItem("token"); // Token autentikasi
+  const apiUrl =
+    "https://backend-eight-phi-75.vercel.app/api/payment/transactions";
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Gagal mengambil data transaksi.");
+    }
+
+    const transactions = await response.json();
+
+    // Hitung total transaksi
+    const totalPesanan = transactions.length;
+
+    // Tampilkan ke elemen HTML
+    document.getElementById("totalPesanan").textContent = totalPesanan;
+  } catch (error) {
+    console.error("Error:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Terjadi Kesalahan",
+      text: "Gagal menghitung total pesanan.",
+    });
+  }
+}
+
+// Panggil fungsi fetchTotalPesanan setelah halaman dimuat
+document.addEventListener("DOMContentLoaded", fetchTotalPesanan);
