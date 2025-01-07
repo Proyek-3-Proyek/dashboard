@@ -312,6 +312,18 @@ async function editProduct(id_produk) {
     document.getElementById("productCategory").value =
       product.kategori.id_kategori;
 
+    // Menyimpan gambar lama di input hidden
+    document.getElementById("oldProductImage").value = product.gambar;
+
+    // Menampilkan gambar lama di modal
+    const previewOldImage = document.getElementById("previewOldImage");
+    if (product.gambar) {
+      previewOldImage.src = `https://qzbythadanrtksusxdtq.supabase.co/storage/v1/object/public/gambar/${product.gambar}`;
+      previewOldImage.classList.remove("hidden"); // Tampilkan gambar
+    } else {
+      previewOldImage.classList.add("hidden"); // Sembunyikan jika tidak ada gambar
+    }
+
     console.log("Form Setelah Diisi:", {
       id_produk: product.id_produk,
       nama: product.nama,
