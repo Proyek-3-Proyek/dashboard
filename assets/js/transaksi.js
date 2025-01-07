@@ -252,19 +252,19 @@ async function fetchPendapatanData() {
         // Hari ini
         if (isToday(createdAt)) {
           const hour = createdAt.getHours();
-          pendapatan.day[hour] += grossAmount + qty;
+          pendapatan.day[hour] += grossAmount * qty;
         }
 
         // Minggu ini
         if (isThisWeek(createdAt)) {
           const dayOfWeek = createdAt.getDay();
-          pendapatan.week[dayOfWeek] += grossAmount + qty;
+          pendapatan.week[dayOfWeek] += grossAmount * qty;
         }
 
         // Bulan ini
         if (isThisMonth(createdAt)) {
           const dateOfMonth = createdAt.getDate() - 1;
-          pendapatan.month[dateOfMonth] += grossAmount + qty;
+          pendapatan.month[dateOfMonth] += grossAmount * qty;
         }
       }
     });
