@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         row.innerHTML = `
             <td class="px-4 py-2">${transaction.transaksi_id}</td>
             <td class="px-4 py-2">${transaction.nama_produk}</td>
+            <td class="px-4 py-2">${transaction.jumlah}</td>
             <td class="px-4 py-2">${new Date(
               transaction.created_at
             ).toLocaleString()}</td>
@@ -71,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 transaction.status
               )} px-2 py-1 rounded">${transaction.status}</span>
             </td>
-            
           `;
 
         transactionTable.appendChild(row);
