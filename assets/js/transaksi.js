@@ -247,23 +247,24 @@ async function fetchPendapatanData() {
       if (transaction.status === "paid") {
         const createdAt = new Date(transaction.created_at);
         const grossAmount = transaction.gross_amount;
+        const qty = transaction.jumlah;
 
         // Hari ini
         if (isToday(createdAt)) {
           const hour = createdAt.getHours();
-          pendapatan.day[hour] += grossAmount;
+          pendapatan.day[hour] += grossAmount + qty;
         }
 
         // Minggu ini
         if (isThisWeek(createdAt)) {
           const dayOfWeek = createdAt.getDay();
-          pendapatan.week[dayOfWeek] += grossAmount;
+          pendapatan.week[dayOfWeek] += grossAmount + qty;
         }
 
         // Bulan ini
         if (isThisMonth(createdAt)) {
           const dateOfMonth = createdAt.getDate() - 1;
-          pendapatan.month[dateOfMonth] += grossAmount;
+          pendapatan.month[dateOfMonth] += grossAmount + qty;
         }
       }
     });
