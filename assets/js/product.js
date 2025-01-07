@@ -340,6 +340,7 @@ openModal.addEventListener("click", () => {
   productForm.reset(); // Reset semua input form
   document.getElementById("productId").value = ""; // Reset ID produk
   document.getElementById("productCategory").value = ""; // Reset kategori
+  document.getElementById("oldProductImage").value = ""; // Reset gambar lama
   modalTitle.textContent = "Tambah Produk";
   modal.classList.remove("hidden");
 });
