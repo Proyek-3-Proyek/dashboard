@@ -439,13 +439,3 @@ function parseJwt(token) {
 
   return JSON.parse(jsonPayload);
 }
-
-document.getElementById("oldProductImage").value = product.gambar;
-
-const previewOldImage = document.getElementById("previewOldImage");
-if (product.gambar) {
-  previewOldImage.src = `https://qzbythadanrtksusxdtq.supabase.co/storage/v1/object/public/gambar/${product.gambar}`;
-  previewOldImage.classList.remove("hidden"); // Tampilkan gambar
-} else {
-  previewOldImage.classList.add("hidden"); // Sembunyikan jika tidak ada gambar
-}
