@@ -351,6 +351,11 @@ openModal.addEventListener("click", () => {
   document.getElementById("productId").value = ""; // Reset ID produk
   document.getElementById("productCategory").value = ""; // Reset kategori
   document.getElementById("oldProductImage").value = ""; // Reset gambar lama
+
+  // Sembunyikan container gambar lama
+  const oldImageContainer = document.getElementById("oldImageContainer");
+  oldImageContainer.classList.add("hidden");
+
   modalTitle.textContent = "Tambah Produk";
   modal.classList.remove("hidden");
 });
