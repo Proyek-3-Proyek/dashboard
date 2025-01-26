@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const userData = parseJwt(token);
   const { name: adminName, role: userRole } = userData;
+  console.log(localStorage.getItem("token"));
 
   if (userRole !== "admin") {
     return redirectToLogin(
