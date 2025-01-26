@@ -2,59 +2,65 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    Swal.fire({
-      icon: "error",
-      title: "Akses Ditolak",
-      text: "Anda tidak memiliki akses. Silakan login sebagai admin.",
-      confirmButtonText: "OK",
-    }).then(() => {
-      window.location.href = "/login";
-    });
-    return;
+    return redirectToLogin(
+      "Akses Ditolak",
+      "Anda tidak memiliki akses. Silakan login sebagai admin."
+    );
   }
 
-  // Cek role user dari token JWT
-  // Parse token untuk mendapatkan nama admin
   const userData = parseJwt(token);
-  const adminName = userData.name; // Pastikan field ini sesuai dengan struktur token Anda
-  document.getElementById("adminName").textContent = adminName;
-  const userRole = parseJwt(token).role;
+  const { name: adminName, role: userRole } = userData;
+
   if (userRole !== "admin") {
-    Swal.fire({
-      icon: "warning",
-      title: "Akses Terbatas",
-      text: "Anda tidak memiliki akses ke halaman ini.",
-      confirmButtonText: "OK",
-    }).then(() => {
-      window.location.href = "/login";
-    });
+    return redirectToLogin(
+      "Akses Terbatas",
+      "Anda tidak memiliki akses ke halaman ini."
+    );
   }
 
-  // Tambahkan event listener untuk tombol logout
-  document.getElementById("logoutButton").addEventListener("click", () => {
-    Swal.fire({
-      title: "Konfirmasi Logout",
-      text: "Apakah Anda yakin ingin logout?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Ya, logout",
-      cancelButtonText: "Batal",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        localStorage.removeItem("token");
-        Swal.fire("Logout Berhasil", "Anda telah logout.", "success").then(
-          () => {
-            window.location.href = "/login";
-          }
-        );
-      }
-    });
-  });
+  // Tampilkan nama admin di dashboard
+  document.getElementById("adminName").textContent = adminName;
+
+  // Logout
+  document
+    .getElementById("logoutButton")
+    .addEventListener("click", handleLogout);
 });
 
-// Fungsi parseJwt untuk mem-parse token JWT
+// Fungsi untuk mengalihkan ke halaman login
+function redirectToLogin(title, text) {
+  Swal.fire({
+    icon: "error",
+    title: title,
+    text: text,
+    confirmButtonText: "OK",
+  }).then(() => {
+    window.location.href = "/login";
+  });
+}
+
+// Fungsi untuk menangani logout
+function handleLogout() {
+  Swal.fire({
+    title: "Konfirmasi Logout",
+    text: "Apakah Anda yakin ingin logout?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Ya, logout",
+    cancelButtonText: "Batal",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      localStorage.removeItem("token");
+      Swal.fire("Logout Berhasil", "Anda telah logout.", "success").then(() => {
+        window.location.href = "/login";
+      });
+    }
+  });
+}
+
+// Fungsi parseJwt untuk memproses token JWT
 function parseJwt(token) {
   const base64Url = token.split(".")[1];
   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
