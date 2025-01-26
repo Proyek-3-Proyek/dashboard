@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Periksa token di localStorage
   const token = localStorage.getItem("token");
 
   if (!token) {
@@ -15,6 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Cek role user dari token JWT
+  // Parse token untuk mendapatkan nama admin
+  const userData = parseJwt(token);
+  const adminName = userData.name; // Pastikan field ini sesuai dengan struktur token Anda
+  document.getElementById("adminName").textContent = adminName;
   const userRole = parseJwt(token).role;
   if (userRole !== "admin") {
     Swal.fire({
