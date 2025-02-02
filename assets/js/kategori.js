@@ -95,7 +95,7 @@ categoryForm.addEventListener("submit", async (e) => {
           },
           body: JSON.stringify({ jenis_kategori }),
         });
-        if (!response.ok) throw new Error("Gagal menyimpan kategori");
+        if (!response.ok) throw new Error("Gagal menyimpan kategori, Nama kategori sudah ada atau tidak sesuai format (berupa huruf dan tidak diisi dengan sembarangan).");
 
         Swal.fire({
           icon: "success",
@@ -109,7 +109,7 @@ categoryForm.addEventListener("submit", async (e) => {
         Swal.fire({
           icon: "error",
           title: "Gagal",
-          text: "Gagal menyimpan kategori, Nama kategori sudah ada atau tidak sesuai format (berupa huruf dan tidak diisi dengan sembarangan).",
+          text: "Gagal menyimpan kategori.",
         });
       }
     }
