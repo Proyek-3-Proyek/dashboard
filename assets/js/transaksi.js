@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
               transaction.created_at
             ).toLocaleString()}</td>
             <td class="px-4 py-2">${formattedUnitPrice}</td>
-            <td class="px-4 py-2">${formattedTotalPrice}</td>
+            
             <td class="px-4 py-2">
               <span class="${getStatusClass(
                 transaction.status
