@@ -174,7 +174,7 @@ async function calculateTotalSales() {
 
     transactions.forEach((transaction) => {
       if (transaction.status === "paid") {
-        totalPendapatan += transaction.gross_amount * transaction.jumlah;
+        totalPendapatan += transaction.gross_amount;
         totalProdukTerjual += transaction.jumlah;
       }
     });
