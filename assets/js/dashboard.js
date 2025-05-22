@@ -19,6 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+  Swal.fire({
+    icon: "success",
+    title: "Login Berhasil",
+    text: `Selamat datang, ${adminName}!`,
+    timer: 2000,
+    showConfirmButton: false,
+  });
+
   // Tampilkan nama admin di dashboard
   document.getElementById("adminName").textContent = adminName;
 
