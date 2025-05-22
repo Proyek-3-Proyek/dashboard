@@ -56,6 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
       // Render data transaksi ke tabel
       transactionTable.innerHTML = ""; // Kosongkan tabel sebelum render
       transactions.forEach((transaction) => {
+        const formattedUnitPrice = `Rp. ${transaction.gross_amount.toLocaleString(
+          "id-ID"
+        )}`;
+        const formattedTotalPrice = `Rp. ${(
+          transaction.gross_amount * transaction.jumlah
+        ).toLocaleString("id-ID")}`;
+
         const row = document.createElement("tr");
         row.className = "hover:bg-gray-100";
 
@@ -66,10 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
             <td class="px-4 py-2">${new Date(
               transaction.created_at
             ).toLocaleString()}</td>
-            <td class="px-4 py-2">Rp${transaction.gross_amount.toLocaleString()}</td>
-            <td class="px-4 py-2">Rp${
-              transaction.gross_amount * transaction.jumlah
-            }</td>
+            <td class="px-4 py-2">${formattedUnitPrice}</td>
+            
             <td class="px-4 py-2">
               <span class="${getStatusClass(
                 transaction.status
@@ -145,12 +150,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // calculasiPendapatan
 async function calculateTotalSales() {
-  const token = localStorage.getItem("token"); // Token untuk autentikasi
+  const token = localStorage.getItem("token");
   const apiUrl =
     "https://backend-eight-phi-75.vercel.app/api/payment/transactions";
 
   try {
-    // Fetch data transaksi
     const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
@@ -165,27 +169,22 @@ async function calculateTotalSales() {
 
     const transactions = await response.json();
 
-    // Inisialisasi variabel untuk total
     let totalPendapatan = 0;
     let totalProdukTerjual = 0;
 
-    // Proses data transaksi
     transactions.forEach((transaction) => {
       if (transaction.status === "paid") {
-        totalPendapatan += transaction.gross_amount * transaction.jumlah;
+        totalPendapatan += transaction.gross_amount;
         totalProdukTerjual += transaction.jumlah;
       }
     });
 
-    // Update elemen HTML dengan hasil perhitungan
     document.getElementById("totalProduk").textContent = totalProdukTerjual;
     document.getElementById(
       "totalPendapatan"
-    ).textContent = `Rp${totalPendapatan.toLocaleString()}`;
+    ).textContent = `Rp. ${totalPendapatan.toLocaleString("id-ID")}`;
   } catch (error) {
     console.error("Error:", error);
-
-    // Tampilkan error ke UI jika terjadi masalah
     Swal.fire({
       icon: "error",
       title: "Terjadi Kesalahan",
@@ -255,24 +254,23 @@ async function fetchPendapatanData() {
         // Hari ini
         if (isToday(createdAt)) {
           const hour = createdAt.getHours();
-          pendapatan.day[hour] += grossAmount * qty;
+          pendapatan.day[hour] += grossAmount;
         }
 
         // Minggu ini
         if (isThisWeek(createdAt)) {
           const dayOfWeek = createdAt.getDay();
-          pendapatan.week[dayOfWeek] += grossAmount * qty;
+          pendapatan.week[dayOfWeek] += grossAmount;
         }
 
         // Bulan ini
         if (isThisMonth(createdAt)) {
           const dateOfMonth = createdAt.getDate() - 1;
-          pendapatan.month[dateOfMonth] += grossAmount * qty;
+          pendapatan.month[dateOfMonth] += grossAmount;
         }
       }
     });
 
-    // Perbarui diagram dengan data pendapatan
     updateChart(pendapatan);
   } catch (error) {
     console.error("Error:", error);
