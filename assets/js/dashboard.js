@@ -19,13 +19,16 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  Swal.fire({
-    icon: "success",
-    title: "Login Berhasil",
-    text: `Selamat datang, ${adminName}!`,
-    timer: 2000,
-    showConfirmButton: false,
-  });
+  if (localStorage.getItem("justLoggedIn") === "true") {
+    Swal.fire({
+      icon: "success",
+      title: "Login Berhasil",
+      text: `Selamat datang, ${adminName}!`,
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    localStorage.removeItem("justLoggedIn"); // Hanya sekali tampil
+  }
 
   // Tampilkan nama admin di dashboard
   document.getElementById("adminName").textContent = adminName;
